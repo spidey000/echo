@@ -28,26 +28,6 @@ public class SaidItActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CODE = 5465;
     private boolean isFragmentSet = false;
     private AlertDialog permissionDeniedDialog;
-    private SaidItService echoService;
-    private boolean isBound = false;
-
-    private final ServiceConnection echoConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName className, IBinder binder) {
-            SaidItService.BackgroundRecorderBinder typedBinder = (SaidItService.BackgroundRecorderBinder) binder;
-            echoService = typedBinder.getService();
-            isBound = true;
-            if (mainFragment != null) {
-                mainFragment.setService(echoService);
-            }
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            echoService = null;
-            isBound = false;
-        }
-    };
     private static final int HOW_TO_REQUEST_CODE = 123;
     private SaidItFragment mainFragment;
 
@@ -111,12 +91,9 @@ public class SaidItActivity extends AppCompatActivity {
             }
 
             if (allPermissionsGranted) {
-                if (!isBound) {
-                    // Start the service to ensure it's running
-                    Intent serviceIntent = new Intent(this, SaidItService.class);
-                    startService(serviceIntent);
-                    bindService(serviceIntent, echoConnection, Context.BIND_AUTO_CREATE);
-                }
+                // Start the service to ensure it's running
+                Intent serviceIntent = new Intent(this, SaidItService.class);
+                startService(serviceIntent);
                 showFragment();
             } else {
                 if (permissionDeniedDialog == null || !permissionDeniedDialog.isShowing()) {
@@ -177,16 +154,9 @@ public class SaidItActivity extends AppCompatActivity {
                 .show();
     }
 
-    public SaidItService getEchoService() {
-        return echoService;
-    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (isBound) {
-            unbindService(echoConnection);
-            isBound = false;
-        }
     }
 }

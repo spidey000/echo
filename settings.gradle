@@ -1,1 +1,20 @@
+// This block tells Gradle where to find plugins
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+// This block tells Gradle where to find project dependencies (libraries)
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+// Your existing line
 include ':SaidIt'

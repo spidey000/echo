@@ -33,6 +33,18 @@
             app:layout_constraintEnd_toStartOf="@+id/play_button"
             tools:text="01:23 | January 1, 2024" />
 
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/recording_tags_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textAppearance="?attr/textAppearanceBodySmall"
+            android:textColor="?attr/colorPrimary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recording_info_text"
+            app:layout_constraintEnd_toStartOf="@+id/play_button"
+            tools:text="Tags: Speech, Music" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/play_button"
             style="?attr/materialIconButtonStyle"

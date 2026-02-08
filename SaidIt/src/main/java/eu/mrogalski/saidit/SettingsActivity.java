@@ -31,6 +31,8 @@ public class SettingsActivity extends AppCompatActivity {
     private Button memoryLowButton, memoryMediumButton, memoryHighButton;
     private Button quality8kHzButton, quality16kHzButton, quality48kHzButton;
     private SwitchMaterial autoSaveSwitch;
+    private SwitchMaterial noiseSuppressorSwitch;
+    private SwitchMaterial automaticGainControlSwitch;
     private Slider autoSaveDurationSlider;
     private TextView autoSaveDurationLabel;
 
@@ -98,6 +100,8 @@ public class SettingsActivity extends AppCompatActivity {
         quality16kHzButton = findViewById(R.id.quality_16kHz);
         quality48kHzButton = findViewById(R.id.quality_48kHz);
         autoSaveSwitch = findViewById(R.id.auto_save_switch);
+        noiseSuppressorSwitch = findViewById(R.id.noise_suppressor_switch);
+        automaticGainControlSwitch = findViewById(R.id.automatic_gain_control_switch);
         autoSaveDurationSlider = findViewById(R.id.auto_save_duration_slider);
         autoSaveDurationLabel = findViewById(R.id.auto_save_duration_label);
         Button howToButton = findViewById(R.id.how_to_button);
@@ -120,16 +124,25 @@ public class SettingsActivity extends AppCompatActivity {
         memoryToggleGroup.addOnButtonCheckedListener(memoryToggleListener);
         qualityToggleGroup.addOnButtonCheckedListener(qualityToggleListener);
 
+        noiseSuppressorSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            sharedPreferences.edit().putBoolean("noise_suppressor_enabled", isChecked).apply();
+            if (isBound) {
+                service.setSampleRate(service.getSamplingRate());
+            }
+        });
+
+        automaticGainControlSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            sharedPreferences.edit().putBoolean("automatic_gain_control_enabled", isChecked).apply();
+            if (isBound) {
+                service.setSampleRate(service.getSamplingRate());
+            }
+        });
+
         autoSaveSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             sharedPreferences.edit().putBoolean("auto_save_enabled", isChecked).apply();
             autoSaveDurationSlider.setEnabled(isChecked);
             autoSaveDurationLabel.setEnabled(isChecked);
             if (isBound) {
-                if (isChecked) {
-                    service.scheduleAutoSave();
-                } else {
-                    service.cancelAutoSave();
-                }
             }
         });
 
@@ -138,9 +151,6 @@ public class SettingsActivity extends AppCompatActivity {
             updateAutoSaveLabel(minutes);
             if (fromUser) {
                 sharedPreferences.edit().putInt("auto_save_duration", minutes * 60).apply();
-                if (isBound) {
-                    service.scheduleAutoSave();
-                }
             }
         });
     }
@@ -210,6 +220,12 @@ public class SettingsActivity extends AppCompatActivity {
         // Re-add listeners
         memoryToggleGroup.addOnButtonCheckedListener(memoryToggleListener);
         qualityToggleGroup.addOnButtonCheckedListener(qualityToggleListener);
+        
+        boolean noiseSuppressorEnabled = sharedPreferences.getBoolean("noise_suppressor_enabled", false);
+        noiseSuppressorSwitch.setChecked(noiseSuppressorEnabled);
+
+        boolean automaticGainControlEnabled = sharedPreferences.getBoolean("automatic_gain_control_enabled", false);
+        automaticGainControlSwitch.setChecked(automaticGainControlEnabled);
     }
 
     private void updateHistoryLimit() {

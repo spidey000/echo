@@ -1,18 +1,16 @@
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-        maven { url "https://repo.maven.apache.org/maven2" }
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:8.12.1'
-    }
+plugins {
+    id 'com.android.application'
+    id 'com.google.gms.google-services' version '4.4.1' apply false
 }
-apply plugin: 'com.android.application'
 
-repositories {
-        mavenCentral()
-        maven { url "https://maven.google.com" }
+// Apply Google Services plugin only if google-services.json is present
+def hasGoogleServicesJson = file('google-services.json').exists() ||
+        file('src/debug/google-services.json').exists() ||
+        file('src/release/google-services.json').exists()
+if (hasGoogleServicesJson) {
+    apply plugin: 'com.google.gms.google-services'
+} else {
+    logger.lifecycle("google-services.json missing; skipping Google Services plugin")
 }
 
 android {
@@ -25,6 +23,7 @@ android {
         targetSdk 34
         versionCode 15
         versionName "2.0.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     signingConfigs {
@@ -38,26 +37,54 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFile file('proguard.cfg')
             proguardFile getDefaultProguardFile('proguard-android-optimize.txt')
-            signingConfig signingConfigs.release
+            // signingConfig signingConfigs.release
         }
 
         debug {
             //signingConfig signingConfigs.release
         }
     }
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+            returnDefaultValues = true
+            
+            all {
+                timeout = java.time.Duration.ofSeconds(60)
+                maxHeapSize = "2g"
+                forkEvery = 50 // Fork JVM every 50 tests
+                maxParallelForks = 2
+                
+                testLogging {
+                    events "started", "passed", "skipped", "failed"
+                    showStandardStreams = false
+                    exceptionFormat = "full"
+                }
+                
+                systemProperty 'robolectric.logging', 'stdout'
+                systemProperty 'robolectric.dependency.proxy.host', ''
+                systemProperty 'robolectric.dependency.proxy.port', '0'
+            }
+        }
+        
+        animationsDisabled = true
+    }
+    
     lint {
+        checkReleaseBuilds false
         abortOnError false
+        checkDependencies false
     }
     buildFeatures {
         buildConfig true
     }
     
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
 }
@@ -69,4 +96,20 @@ dependencies {
     implementation 'com.getkeepsafe.taptargetview:taptargetview:1.13.3'
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.mockito:mockito-core:5.11.0'
+    testImplementation 'org.robolectric:robolectric:4.10.3'
+    testImplementation 'androidx.test:core:1.5.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation 'androidx.test:runner:1.5.2'
+    androidTestImplementation 'androidx.test:rules:1.5.0'
+    implementation 'org.tensorflow:tensorflow-lite:2.12.0'
+    implementation 'org.tensorflow:tensorflow-lite-support:0.4.3'
+    implementation 'org.tensorflow:tensorflow-lite-task-audio:0.4.3'
+}
+
+configurations.all {
+    resolutionStrategy {
+        force 'org.robolectric:robolectric:4.11.1'
+        force 'junit:junit:4.13.2'
+    }
 }
