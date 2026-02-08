@@ -5,7 +5,7 @@ buildscript {
         maven { url "https://repo.maven.apache.org/maven2" }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.10.1'
+        classpath 'com.android.tools.build:gradle:8.12.1'
     }
 }
 apply plugin: 'com.android.application'
@@ -54,10 +54,19 @@ android {
     buildFeatures {
         buildConfig true
     }
+    
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: '*.jar')
     implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.11.0'
+    implementation 'com.getkeepsafe.taptargetview:taptargetview:1.13.3'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.mockito:mockito-core:5.11.0'
 }

@@ -1,19 +1,44 @@
-Echo
-====
+# Echo - Never Miss a Moment
 
-Time travelling recorder for Android.
-It is free/libre and gratis software.
+Echo is a modern Android application that continuously records audio in the background, allowing you to go back in time and save moments that have already happened. Whether it's a brilliant idea, a funny quote, or an important note, Echo ensures you never miss it.
 
-Download
----
+## Features
 
-* [F-Droid](https://f-droid.org/repository/browse/?fdid=eu.mrogalski.saidit)
+*   **Continuous Background Recording:** Echo runs silently in the background, keeping a rolling buffer of the last few hours of audio.
+*   **Save Clips from the Past:** Instantly save audio clips of various lengths from the buffered memory.
+*   **Auto-Save:** Automatically save recordings when the memory buffer is full, ensuring you never lose important audio.
+*   **Modern, Intuitive Interface:** A clean, professional design built with Material You principles.
+*   **Customizable Settings:** Adjust the audio quality and memory usage to fit your needs.
 
-Architecture
----
+## Getting Started
 
-**SaidItFragment** the main view of the app.
+### Prerequisites
 
-**SaidItService** manages a high priority thread that records audio. The thread is a state machine that can be accessed by sending it tasks using Android's Handler (`audioHandler`).
+*   Android Studio
+*   Java Development Kit (JDK)
 
-**AudioMemory** (not thread-safe) manages the in-memory ring buffer of audio chunks.
+### Building the Project
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/mafik/echo.git
+    ```
+2.  **Open the project in Android Studio.**
+3.  **Create a `local.properties` file** in the root of the project and add the following line, pointing to your Android SDK location:
+    ```
+    sdk.dir=/path/to/your/android/sdk
+    ```
+4.  **Build the project:**
+    *   From the command line, run:
+        ```bash
+        ./gradlew assembleDebug
+        ```
+    *   Or, use the "Build" menu in Android Studio.
+
+## Contributing
+
+We welcome contributions! Please feel free to open an issue or submit a pull request.
+
+## Future Development
+
+For a detailed roadmap of planned features and improvements, please see the [`spec.md`](spec.md) file.

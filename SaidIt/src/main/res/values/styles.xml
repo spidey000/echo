@@ -1,119 +1,74 @@
 <resources>
-
     <!-- Base application theme. -->
-    <style name="SaidIt" parent="Theme.AppCompat.Light">
-        <item name="android:windowNoTitle">true</item>
-<!--
-        <item name="android:buttonStyle">@style/Button</item>
--->
-        <item name="android:textViewStyle">@style/TextView</item>
-        <item name="android:windowBackground">@color/gray_e</item>
-        <item name="android:windowActionBar">false</item>
+    <style name="SaidIt" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/md_theme_primary</item>
+        <item name="colorOnPrimary">@color/md_theme_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/md_theme_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/md_theme_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/md_theme_secondary</item>
+        <item name="colorOnSecondary">@color/md_theme_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/md_theme_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/md_theme_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/md_theme_tertiary</item>
+        <item name="colorOnTertiary">@color/md_theme_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/md_theme_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/md_theme_onTertiaryContainer</item>
+        <item name="colorError">@color/md_theme_error</item>
+        <item name="colorOnError">@color/md_theme_onError</item>
+        <item name="colorErrorContainer">@color/md_theme_errorContainer</item>
+        <item name="colorOnErrorContainer">@color/md_theme_onErrorContainer</item>
+        <item name="android:colorBackground">@color/md_theme_background</item>
+        <item name="colorOnBackground">@color/md_theme_onBackground</item>
+        <item name="colorSurface">@color/md_theme_surface</item>
+        <item name="colorOnSurface">@color/md_theme_onSurface</item>
+        <item name="colorSurfaceVariant">@color/md_theme_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/md_theme_onSurfaceVariant</item>
+        <item name="colorOutline">@color/md_theme_outline</item>
+        <item name="colorOnSurfaceInverse">@color/md_theme_inverseOnSurface</item>
+        <item name="colorSurfaceInverse">@color/md_theme_inverseSurface</item>
+        <item name="colorPrimaryInverse">@color/md_theme_inversePrimary</item>
+        <item name="android:fontFamily">@font/inter</item>
 
-       <!-- <item name="android:alertDialogTheme">@style/SaidIt.AlertDialogTheme</item>
-        <item name="android:dialogTheme">@style/SaidIt.AlertDialogTheme</item>-->
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
+        <item name="android:windowTranslucentStatus">true</item>
+
+        <!-- Typography -->
+        <item name="textAppearanceHeadlineLarge">@style/TextAppearance.SaidIt.HeadlineLarge</item>
+        <item name="textAppearanceHeadlineMedium">@style/TextAppearance.SaidIt.HeadlineMedium</item>
+        <item name="textAppearanceTitleLarge">@style/TextAppearance.SaidIt.TitleLarge</item>
+        <item name="textAppearanceTitleMedium">@style/TextAppearance.SaidIt.TitleMedium</item>
+        <item name="textAppearanceBodyLarge">@style/TextAppearance.SaidIt.BodyLarge</item>
+        <item name="textAppearanceBodyMedium">@style/TextAppearance.SaidIt.BodyMedium</item>
+        <item name="textAppearanceLabelLarge">@style/TextAppearance.SaidIt.LabelLarge</item>
     </style>
 
-    <style name="SaidIt.AlertDialogTheme">
-
-        <item name="android:windowFrame">@null</item>
-        <item name="android:windowIsFloating">true</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
-        <item name="android:colorBackgroundCacheHint">@null</item>
-        <item name="android:textViewStyle">@style/TextView</item>
-
-        <item name="android:windowTitleStyle">@style/SaidIt.DialogWindowTitle</item>
-        <!--<item name="android:windowTitleStyle">@android:style/DialogWindowTitle.Holo.Light</item>-->
-        <!--
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowMinWidthMajor">@android:dimen/dialog_min_width_major</item>
-        <item name="android:windowMinWidthMinor">@android:dimen/dialog_min_width_minor</item>
-        -->
+    <style name="TextAppearance.SaidIt.HeadlineLarge" parent="TextAppearance.Material3.HeadlineLarge">
+        <item name="android:textColor">?attr/colorOnSurface</item>
     </style>
 
-    <style name="SaidIt.DialogWindowTitle">
-        <item name="android:maxLines">1</item>
-        <item name="android:scrollHorizontally">true</item>
-        <item name="android:textAppearance">@style/SaidIt.TextAppearance.DialogWindowTitle</item>
+    <style name="TextAppearance.SaidIt.HeadlineMedium" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="android:textColor">?attr/colorOnSurface</item>
     </style>
 
-    <style name="SaidIt.TextAppearance"></style>
-
-    <style name="SaidIt.TextAppearance.DialogWindowTitle">
-
-        <item name="android:textSize">22sp</item>
-        <item name="android:textColor">@color/green</item>
+    <style name="TextAppearance.SaidIt.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textColor">?attr/colorOnSurface</item>
     </style>
 
-    <style name="Theme" parent="SaidIt">
+    <style name="TextAppearance.SaidIt.TitleMedium" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
     </style>
 
-    <style name="ButtonBase" parent="android:Widget.Holo.Button">
-        <item name="android:minWidth">48dp</item>
-        <item name="android:minHeight">48dp</item>
-        <item name="android:gravity">center</item>
-        <item name="android:textSize">@dimen/emph_text_size</item>
-        <item name="android:background">@drawable/gray_button</item>
-        <item name="android:textColor">@color/gray_f</item>
-        <item name="android:paddingTop">@dimen/button_padding</item>
-        <item name="android:paddingBottom">@dimen/button_padding</item>
-        <item name="android:layout_margin">1dp</item>
+    <style name="TextAppearance.SaidIt.BodyLarge" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textColor">?attr/colorOnSurface</item>
     </style>
 
-    <style name="Button" parent="ButtonBase">
-        <item name="android:shadowRadius">0.01</item>
-        <item name="android:shadowDx">0</item>
-        <item name="android:shadowDy">2</item>
-        <item name="android:shadowColor">@color/gray_6</item>
+    <style name="TextAppearance.SaidIt.BodyMedium" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
     </style>
 
-    <style name="Ticket">
-        <item name="android:background">@drawable/ticket</item>
-        <item name="android:textColor">@color/gray_f</item>
-        <item name="android:textSize">@dimen/ticket_text_size</item>
-        <item name="android:minHeight">0dp</item>
-        <item name="android:minWidth">0dp</item>
-        <item name="android:paddingTop">0dp</item>
-        <item name="android:paddingBottom">0dp</item>
-        <item name="android:shadowRadius">0</item>
-        <item name="android:shadowDx">0</item>
-        <item name="android:shadowDy">0</item>
-        <item name="android:shadowColor">@color/transparent</item>
-    </style>
-
-    <style name="CircleButton" parent="ButtonBase">
-        <item name="android:background">@drawable/circle_button</item>
-        <item name="android:layout_margin">20dp</item>
-    </style>
-
-    <style name="GreenButton" parent="ButtonBase">
-        <item name="android:background">@drawable/top_green_button</item>
-        <item name="android:layout_margin">0dp</item>
-        <item name="android:shadowRadius">0.01</item>
-        <item name="android:shadowDx">0</item>
-        <item name="android:shadowDy">2</item>
-        <item name="android:shadowColor">@color/dark_green</item>
-        <item name="android:textColor">@color/gray_f</item>
-    </style>
-
-    <style name="TextBase" parent="android:Widget.TextView">
-        <item name="android:textColor">@color/gray_0</item>
-        <item name="android:textSize">@dimen/info_text_size</item>
-        <item name="android:gravity">center</item>
-    </style>
-
-    <style name="TextView" parent="TextBase">
-    </style>
-
-    <style name="EmphasizedText" parent="TextView">
-        <item name="android:textSize">@dimen/emph_text_size</item>
-    </style>
-
-    <style name="SmallText">
-        <item name="android:textColor">@color/gray_8</item>
-        <item name="android:textSize">@dimen/small_text_size</item>
+    <style name="TextAppearance.SaidIt.LabelLarge" parent="TextAppearance.Material3.LabelLarge">
+        <item name="android:textColor">?attr/colorPrimary</item>
     </style>
 </resources>

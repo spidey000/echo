@@ -28,3 +28,9 @@ proguard/
 # IDEs
 .idea/
 .vscode/
+
+# Ignore Markdown files
+*.md
+
+# Ignore Claude agent files
+.claude/

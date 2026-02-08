@@ -3,7 +3,9 @@
 
     <string name="app_name" translatable="false">Echo</string>
 
-    <!-- Notifications -->
+    <string name="notification_text">Recording audio in the background.</string>
+    <string name="error_creating_recording_file">Error creating recording file</string>
+    <string name="error_saving_recording">Error saving recording</string>
 
     <string name="recording">Recording…</string>
     <string name="recording_saved">Recording saved</string>
@@ -34,6 +36,15 @@
         <item quantity="other">%d minutes</item>
     </plurals>
 
+    <plurals name="minute_plural">
+        <item quantity="one">%d minute</item>
+        <item quantity="other">%d minutes</item>
+    </plurals>
+    <plurals name="hour_plural">
+        <item quantity="one">%d hour</item>
+        <item quantity="other">%d hours</item>
+    </plurals>
+    <string name="time_join">%1$s and %2$s</string>
     <string name="minute_second_join">" and "</string>
 
     <plurals name="second">
@@ -128,4 +139,51 @@
 <b>MP4</b> - oferuje wysoką jakość i dobrą kompresję ale podobnie jak 3GP, szybko zużywa energię.</string>
     -->
 
+    <string name="support_the_developer">Support the developer</string>
+    <string name="github">GitHub</string>
+    <string name="stop">Stop</string>
+    <string name="now_recording">Now Recording</string>
+    <string name="memory_holds">Memory Holds</string>
+    <string name="save_clip">Save Clip</string>
+    <string name="duration">Duration</string>
+    <string name="one_minute">1 minute</string>
+    <string name="five_minutes">5 minutes</string>
+    <string name="thirty_minutes">30 minutes</string>
+    <string name="all_memory">All memory</string>
+    <string name="auto_save_title">Auto-save</string>
+    <string name="auto_save_description">Automatically save recordings when the memory buffer is full.</string>
+    <string name="auto_save_duration_title">Auto-save duration</string>
+    <string name="listening">Listening</string>
+    <string name="disabled">Disabled</string>
+    <string name="settings">Settings</string>
+    <string name="audio_memory_is_limited_at">Audio memory is limited at</string>
+    <string name="share">Share</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="save">Save</string>
+    <string name="saved_recordings">Saved Recordings</string>
+
+    <string name="error_title">Error</string>
+    <string name="error_saving_failed">Failed to save the recording. Please try again.</string>
+
+    <!-- How-To Guide -->
+    <string name="how_to_guide">How-To Guide</string>
+    <string name="how_to_title_1">How does Echo work?</string>
+    <string name="how_to_desc_1">Echo is always listening in the background, keeping a temporary audio history in your phone\'s memory. This lets you save audio from the past.</string>
+    <string name="how_to_title_2">Saving a Clip</string>
+    <string name="how_to_desc_2">When you want to save something, tap the \'Save Clip\' button. You can choose how much of the recent history to save to a permanent file.</string>
+    <string name="how_to_title_3">Managing Recordings</string>
+    <string name="how_to_desc_3">You can access, play, and delete your saved recordings from the \'Saved Recordings\' screen.</string>
+    <string name="got_it">Got It</string>
+
+    <!-- Interactive Tour -->
+    <string name="tour_listening_toggle_title">Enable or Disable</string>
+    <string name="tour_listening_toggle_desc">Tap here to turn Echo\'s background listening on or off. When disabled, no audio is kept in memory.</string>
+    <string name="tour_memory_holds_title">Audio History</string>
+    <string name="tour_memory_holds_desc">This shows you how much audio from the immediate past is currently stored in your phone\'s temporary memory.</string>
+    <string name="tour_save_clip_title">Save a Recording</string>
+    <string name="tour_save_clip_desc">This is the main button. Tap it to permanently save a clip from the audio history.</string>
+    <string name="tour_bottom_buttons_title">Manage &amp; Configure</string>
+    <string name="tour_bottom_buttons_desc">Use these buttons to access your saved recordings or change the app\'s settings.</string>
+    <string name="show_tour">Show Tour</string>
+    <string name="no_recordings_yet">No recordings yet.</string>
 </resources>

@@ -125,4 +125,27 @@
     <string name="save_recording">Zapisz nagranie</string> <!-- must end sentence -->
     <string name="permission_required">Wymagane pozwolenie</string>
     <string name="permission_required_message">Echo aplikacja wymaga pozwolenia na nagrywanie i zapisywanie dźwięku. Proszę włączyć to w ustawieniach.</string>
+
+    <string name="support_the_developer">Wesprzyj dewelopera</string>
+    <string name="github">GitHub</string>
+    <string name="stop">Zatrzymaj</string>
+    <string name="now_recording">Teraz nagrywa</string>
+    <string name="memory_holds">Pamięć przechowuje</string>
+    <string name="save_clip">Zapisz klip</string>
+    <string name="duration">Czas trwania</string>
+    <string name="one_minute">1 minuta</string>
+    <string name="five_minutes">5 minut</string>
+    <string name="thirty_minutes">30 minut</string>
+    <string name="all_memory">Cała pamięć</string>
+    <string name="auto_save_title">Automatyczny zapis</string>
+    <string name="auto_save_description">Automatycznie zapisuj nagrania, gdy bufor pamięci jest pełny.</string>
+    <string name="auto_save_duration_title">Czas trwania automatycznego zapisu</string>
+    <string name="listening">Słucham</string>
+    <string name="disabled">Wyłączony</string>
+    <string name="settings">Ustawienia</string>
+    <string name="audio_memory_is_limited_at">Pamięć audio jest ograniczona do</string>
+    <string name="share">Udostępnij</string>
+    <string name="dismiss">Odrzuć</string>
+    <string name="save">Zapisz</string>
+    <string name="saved_recordings">Zapisane nagrania</string>
 </resources>
