@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:ns1="urn:oasis:names:tc:xliff:document:1.2" xmlns:ns2="http://schemas.android.com/tools">
+    <plurals name="history_size_title">
+        <item quantity="one">Aktualnie pamiętana jest ostatnia</item>
+        <item quantity="few">Aktualnie pamiętane są ostatnie</item>
+        <item quantity="many">Aktualnie pamiętane jest ostatnie</item>
+    </plurals>
+    <plurals name="minute">
+        <item quantity="one">%d minuta</item>
+        <item quantity="few">%d minuty</item>
+        <item quantity="many">%d minut</item>
+    </plurals>
+    <plurals name="mtrl_badge_content_description">
+    <item quantity="one">%d nowe powiadomienie</item>
+    <item quantity="few">%d nowe powiadomienia</item>
+    <item quantity="many">%d nowych powiadomień</item>
+    <item quantity="other">%d nowego powiadomienia</item>
+  </plurals>
+    <plurals name="recorded">
+        <item quantity="one">Trwa nagrywanie. Zapisana została ostatnia</item>
+        <item quantity="few">Trwa nagrywanie. Zapisane zostały ostatnie</item>
+        <item quantity="many">Trwa nagrywanie. Zapisane zostało ostatnie</item>
+    </plurals>
+    <plurals name="second">
+        <item quantity="one">%d sekunda</item>
+        <item quantity="few">%d sekundy</item>
+        <item quantity="many">%d sekund</item>
+    </plurals>
+    <string msgid="5976598919945601918" name="abc_action_bar_home_description">"Przejdź na stronę główną"</string>
+    <string msgid="8388173803310557296" name="abc_action_bar_up_description">"Przejdź wyżej"</string>
+    <string msgid="3937310113216875497" name="abc_action_menu_overflow_description">"Więcej opcji"</string>
+    <string msgid="4692188335987374352" name="abc_action_mode_done">"Gotowe"</string>
+    <string msgid="1189761859438369441" name="abc_activity_chooser_view_see_all">"Pokaż wszystko"</string>
+    <string msgid="2165779757652331008" name="abc_activitychooserview_choose_application">"Wybierz aplikację"</string>
+    <string msgid="4215997306490295099" name="abc_capital_off">"WYŁ."</string>
+    <string msgid="884982626291842264" name="abc_capital_on">"WŁ."</string>
+    <string msgid="8833365367933412986" name="abc_menu_alt_shortcut_label">"Alt+"</string>
+    <string msgid="2223301931652355242" name="abc_menu_ctrl_shortcut_label">"Ctrl+"</string>
+    <string msgid="838001238306846836" name="abc_menu_delete_shortcut_label">"Delete"</string>
+    <string msgid="7986526966204849475" name="abc_menu_enter_shortcut_label">"Enter"</string>
+    <string msgid="375214403600139847" name="abc_menu_function_shortcut_label">"Funkcyjny+"</string>
+    <string msgid="4192209724446364286" name="abc_menu_meta_shortcut_label">"Meta+"</string>
+    <string msgid="4741552369836443843" name="abc_menu_shift_shortcut_label">"Shift+"</string>
+    <string msgid="5473865519181928982" name="abc_menu_space_shortcut_label">"spacja"</string>
+    <string msgid="6180552449598693998" name="abc_menu_sym_shortcut_label">"Sym+"</string>
+    <string msgid="5520303668377388990" name="abc_prepend_shortcut_label">"Menu+"</string>
+    <string msgid="7208076849092622260" name="abc_search_hint">"Szukaj…"</string>
+    <string msgid="3741173234950517107" name="abc_searchview_description_clear">"Wyczyść zapytanie"</string>
+    <string msgid="693312494995508443" name="abc_searchview_description_query">"Zapytanie"</string>
+    <string msgid="3417662926640357176" name="abc_searchview_description_search">"Szukaj"</string>
+    <string msgid="1486535517437947103" name="abc_searchview_description_submit">"Wyślij zapytanie"</string>
+    <string msgid="2293578557972875415" name="abc_searchview_description_voice">"Wyszukiwanie głosowe"</string>
+    <string msgid="8875138169939072951" name="abc_shareactionprovider_share_with">"Udostępnij przez:"</string>
+    <string msgid="9055268688411532828" name="abc_shareactionprovider_share_with_application">"Udostępnij przez: <ns1:g id="APPLICATION_NAME">%s</ns1:g>"</string>
+    <string msgid="1656852541809559762" name="abc_toolbar_collapse_description">"Zwiń"</string>
+    <string name="all_memory">Cała pamięć</string>
+    <string name="allow">Umożliwić</string>
+    <string name="audio_memory_change">Możesz ją zmienić modyfikując:</string>
+    <string name="audio_memory_holds">Pojemność pamięci dźwięku to</string>
+    <string name="audio_memory_is_limited_at">Pamięć audio jest ograniczona do</string>
+    <string name="audio_quality_description">Jakość 8kHz wystarcza do zapisu ludzkiej mowy. Wyższe opcje pozwalają na znalezienie kompromisu między jakością nagrania, a zużyciem pamięci.</string>
+    <string name="auto_save_description">Automatycznie zapisuj nagrania, gdy bufor pamięci jest pełny.</string>
+    <string name="auto_save_duration_title">Czas trwania automatycznego zapisu</string>
+    <string name="auto_save_title">Automatyczny zapis</string>
+    <string name="bottomsheet_action_collapse">Zwiń planszę dolną</string>
+    <string name="bottomsheet_action_expand">Rozwiń planszę dolną</string>
+    <string name="bottomsheet_action_expand_halfway">Rozwiń do połowy</string>
+    <string name="bottomsheet_drag_handle_clicked">Dwukrotnie kliknięto uchwyt do przeciągania</string>
+    <string name="bottomsheet_drag_handle_content_description">Uchwyt do przeciągania</string>
+    <string msgid="881409763997275156" name="call_notification_answer_action">"Odbierz"</string>
+    <string msgid="8793775615905189152" name="call_notification_answer_video_action">"Wideo"</string>
+    <string msgid="3229508546291798546" name="call_notification_decline_action">"Odrzuć"</string>
+    <string msgid="2659457946726154263" name="call_notification_hang_up_action">"Rozłącz"</string>
+    <string msgid="6107532579223922871" name="call_notification_incoming_text">"Połączenie przychodzące"</string>
+    <string msgid="8623827134497363134" name="call_notification_ongoing_text">"Trwa połączenie"</string>
+    <string msgid="59049573811482460" name="call_notification_screening_text">"Filtruję połączenie przychodzące"</string>
+    <string name="cant_connect_description">Nie udało mi się skontaktować z serwerem aplikacji. Upewnij się, że połączenie z internetem działa prawidłowo i spróbuj jeszcze raz. Jeśli wciąż występują problemy, spróbuj innej metody płatności.</string>
+    <string name="cant_connect_title">Serwer Nieosiągalny</string>
+    <string name="cant_create_file">Nie mogłem otworzyć pliku: </string>
+    <string name="character_counter_content_description">%1$d z %2$d znaków</string>
+    <string name="character_counter_overflowed_content_description">Przekroczono limit znaków (%1$d z %2$d)</string>
+    <string name="clear_text_end_icon_content_description">Wyczyść tekst</string>
+    <string name="coupon_claimed">Kupon Zużyty</string>
+    <string name="default_price">9.90 zł</string>
+    <string name="disabled">Wyłączony</string>
+    <string name="dismiss">Odrzuć</string>
+    <string name="duration">Czas trwania</string>
+    <string name="error_during_recording_into">Błąd podczas nagrywania do: </string>
+    <string name="error_during_writing_history_into">Błąd podczas zapisywania historii do: </string>
+    <string name="error_icon_content_description">Błąd</string>
+    <string name="exit">Wyjście</string>
+    <string name="exposed_dropdown_menu_content_description">Pokaż menu</string>
+    <string name="five_minutes">5 minut</string>
+    <string name="github">GitHub</string>
+    <string name="history_size_title_static">Aktualnie pamiętane są ostatnie</string>
+    <string name="icon_content_description">Ikona okna</string>
+    <string name="install_qr_dialog_title">Zainstaluj czytnik QR</string>
+    <string name="invalid_license_description">Zeskanowana licencja nie pasuje do twojego urządzenia.</string>
+    <string name="invalid_license_title">Nieprawidłowa Licencja</string>
+    <string name="invalid_qr_code_description">Ten kod nie jest ani licencją, ani kuponem na Echo.</string>
+    <string name="invalid_qr_code_title">Nieprawidłowy kod QR</string>
+    <string name="item_view_role_description">Karta</string>
+    <string name="listening">Słucham</string>
+    <string name="listening_description">Echo pozwala cofać się w czasie i nagrywać wydarzenia z przeszłości.</string>
+    <string name="listening_disabled_enable">Echo wyłączone</string>
+    <string name="listening_enabled_disable">Echo włączone</string>
+    <string name="material_clock_toggle_content_description">Wybierz: przed południem czy po południu</string>
+    <string name="material_hour_24h_suffix">%1$s godz.</string>
+    <string name="material_hour_selection">Wybierz godzinę</string>
+    <string name="material_hour_suffix">%1$s</string>
+    <string name="material_minute_selection">Wybierz minuty</string>
+    <string name="material_minute_suffix">%1$s minut</string>
+    <string name="material_timepicker_am">AM</string>
+    <string name="material_timepicker_clock_mode_description">Aby wprowadzić czas, włącz tryb zegara.</string>
+    <string name="material_timepicker_hour">Godzina</string>
+    <string name="material_timepicker_minute">Minuta</string>
+    <string name="material_timepicker_pm">PM</string>
+    <string name="material_timepicker_select_time">Określ czas</string>
+    <string name="material_timepicker_text_input_mode_description">Aby wprowadzić czas, włącz tryb wprowadzania tekstu.</string>
+    <string name="memory_holds">Pamięć przechowuje</string>
+    <string name="minute_second_join">" i "</string>
+    <string name="mtrl_badge_numberless_content_description">Nowe powiadomienie</string>
+    <string name="mtrl_chip_close_icon_content_description">Usuń: (%1$s)</string>
+    <string name="mtrl_exceed_max_badge_number_content_description" ns2:ignore="PluralsCandidate">Liczba nowych powiadomień przekracza %1$d</string>
+    <string name="mtrl_picker_a11y_next_month">Zmień na następny miesiąc</string>
+    <string name="mtrl_picker_a11y_prev_month">Zmień na poprzedni miesiąc</string>
+    <string name="mtrl_picker_announce_current_range_selection">Wybrana data rozpoczęcia: %1$s – wybrana data zakończenia: %2$s</string>
+    <string name="mtrl_picker_announce_current_selection">Bieżący wybór: %1$s</string>
+    <string name="mtrl_picker_announce_current_selection_none">brak</string>
+    <string name="mtrl_picker_cancel">Anuluj</string>
+    <string name="mtrl_picker_confirm">OK</string>
+    <string name="mtrl_picker_date_header_selected">%1$s</string>
+    <string name="mtrl_picker_date_header_title">Wybierz datę</string>
+    <string name="mtrl_picker_date_header_unselected">Wybrana data</string>
+    <string name="mtrl_picker_day_of_week_column_header">Kolumna z dniami: %1$s</string>
+    <string name="mtrl_picker_end_date_description">Data zakończenia %1$s</string>
+    <string name="mtrl_picker_invalid_format">Nieprawidłowy format.</string>
+    <string name="mtrl_picker_invalid_format_example">Przykład: %1$s</string>
+    <string name="mtrl_picker_invalid_format_use">Użyj formatu: %1$s</string>
+    <string name="mtrl_picker_invalid_range">Nieprawidłowy zakres.</string>
+    <string name="mtrl_picker_navigate_to_current_year_description">Przejdź do bieżącego roku %1$d</string>
+    <string name="mtrl_picker_navigate_to_year_description">Przejdź do roku %1$d</string>
+    <string name="mtrl_picker_out_of_range">Poza zakresem: %1$s</string>
+    <string name="mtrl_picker_range_header_only_end_selected">Data rozpoczęcia – %1$s</string>
+    <string name="mtrl_picker_range_header_only_start_selected">%1$s – data zakończenia</string>
+    <string name="mtrl_picker_range_header_selected">%1$s–%2$s</string>
+    <string name="mtrl_picker_range_header_title">Wybierz zakres</string>
+    <string name="mtrl_picker_range_header_unselected">Data rozpoczęcia – data zakończenia</string>
+    <string name="mtrl_picker_save">Zapisz</string>
+    <string name="mtrl_picker_start_date_description">Data rozpoczęcia %1$s</string>
+    <string name="mtrl_picker_text_input_date_hint">Data</string>
+    <string name="mtrl_picker_text_input_date_range_end_hint">Data zakończenia</string>
+    <string name="mtrl_picker_text_input_date_range_start_hint">Data rozpoczęcia</string>
+    <string name="mtrl_picker_text_input_day_abbr">d</string>
+    <string name="mtrl_picker_text_input_month_abbr">m</string>
+    <string name="mtrl_picker_text_input_year_abbr">r</string>
+    <string name="mtrl_picker_today_description">Dzisiaj %1$s</string>
+    <string name="mtrl_picker_toggle_to_calendar_input_mode">Włącz kalendarzowy tryb wprowadzania</string>
+    <string name="mtrl_picker_toggle_to_day_selection">Kliknij, aby przełączyć się na widok kalendarza</string>
+    <string name="mtrl_picker_toggle_to_text_input_mode">Włącz tekstowy tryb wprowadzania</string>
+    <string name="mtrl_picker_toggle_to_year_selection">Kliknij, aby przełączyć się na widok roku</string>
+    <string name="mtrl_timepicker_cancel">Anuluj</string>
+    <string name="mtrl_timepicker_confirm">OK</string>
+    <string name="now_recording">Teraz nagrywa</string>
+    <string name="one_minute">1 minuta</string>
+    <string name="open">Otwórz</string>
+    <string name="option_a_used_ram">A) Wykorzystywaną pamięć RAM</string>
+    <string name="option_b_audio_quality">B) Jakość dźwięku</string>
+    <string name="password_toggle_content_description">Pokaż hasło</string>
+    <string name="payment_failed_description">Nie mogę zweryfikować zakupu Echo na serwerze aplikacji. Co mam zrobić?</string>
+    <string name="payment_failed_description2">Aby zupełnie zrezygnować z płatności otwórz Ustawienia > Aplikacje > Echo i wyczyść dane aplikacji.</string>
+    <string name="payment_failed_dialog_confirm_manually">Potwierdź przez email</string>
+    <string name="payment_failed_dialog_title">Płatność Nie Potwierdzona</string>
+    <string name="payment_method_dialog_title">Jak chcesz zapłacić?</string>
+    <string name="payment_verification_failed_email_sent_description">Email z opisem twojego problemu został wysłany do autora. Wkrótce otrzymasz odpowiedź z licencją w postaci kodu QR.</string>
+    <string name="payment_verification_failed_email_sent_title">Raport Wysłany</string>
+    <string name="permission_required">Wymagane pozwolenie</string>
+    <string name="permission_required_message">Echo aplikacja wymaga pozwolenia na nagrywanie i zapisywanie dźwięku. Proszę włączyć to w ustawieniach.</string>
+    <string name="press_back_to_cancel">Aby anulować, wciśnij "wstecz"</string>
+    <string name="rate_invite">Spodobało ci się Echo? Możesz pomóc sponsorując je na GitHubie.</string>
+    <string name="read_more_at">Jeśli chcesz dowiedzieć się więcej, przeczytaj pytania i odpowiedzi na</string>
+    <string name="record_2_hrs">2 godz</string>
+    <string name="record_30_minutes">30:00</string>
+    <string name="record_6_hrs">6 godz</string>
+    <string name="record_all_memory">0:00</string>
+    <string name="record_description">Aby po zapisaniu pamięci dowolnym z powyższych przycisków, kontynuować nagrywanie, przytrzymaj go dłużej.</string>
+    <string name="record_five_minutes">5:00</string>
+    <string name="record_one_minute">1:00</string>
+    <string name="recorded_static">Trwa nagrywanie. Zapisana została ostatnia</string>
+    <string name="recording">Nagrywanie…</string>
+    <string name="recording_done_directory">Katalog:</string>
+    <string name="recording_done_filename">Nazwa pliku:</string>
+    <string name="recording_done_runtime">Czas trwania:</string>
+    <string name="recording_done_size">Rozmiar:</string>
+    <string name="recording_done_title">Nagranie Gotowe</string>
+    <string name="recording_name">Wprowadź nazwę nagrania</string>
+    <string name="recording_saved">Nagranie zapisane</string>
+    <string name="recording_stop_description">Czerwony przycisk poniżej pozwala zakończyć nagrywanie.</string>
+    <string name="retry">Spróbuj ponownie</string>
+    <string name="sample_time">22 minuty i 30 sekund.</string>
+    <string name="save">Zapisz</string>
+    <string name="save_clip">Zapisz klip</string>
+    <string name="save_description">Aby zapisać zawartość pamięci do pliku, wybierz ile czasu chcesz zapisać:</string>
+    <string name="save_recording">Zapisz nagranie</string>
+    <string name="saved_recordings">Zapisane nagrania</string>
+    <string msgid="6264217191555673260" name="search_menu_title">"Szukaj"</string>
+    <string name="send">Wyślij</string>
+    <string name="settings">Ustawienia</string>
+    <string name="settings_return">Powrót</string>
+    <string name="share">Udostępnij</string>
+    <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
+    <string name="stop">Zatrzymaj</string>
+    <string name="support_the_developer">Wesprzyj dewelopera</string>
+    <string name="thirty_minutes">30 minut</string>
+    <string name="try_another_qr_code">Spróbuj innego</string>
+    <string name="upper_memory_limit_settings_end">ustawienia.</string>
+    <string name="upper_memory_limit_settings_start">Możesz go zmienić modyfikując</string>
+    <string name="upper_memory_limit_start">Górny limit pamięci to</string>
+    <string name="used_ram_description">Echo oraz inne aplikacje wykorzystują pomięć telefonu do zapisywania swoich danych. Duże wykorzystanie pamięci może spowolnić pozostałe aplikacje.</string>
+    <string name="work_claiming_coupon">Wykorzystuję kupon</string>
+    <string name="work_contacting_server">Odpytuję serwer</string>
+    <string name="work_default">Pracuję</string>
+    <string name="work_preparing_memory">Przygotowuję pamięć</string>
+    <string name="work_verifying_purchase">Weryfikuję zakup</string>
+</resources>

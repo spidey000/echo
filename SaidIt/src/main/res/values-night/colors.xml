@@ -28,4 +28,9 @@
     <color name="md_theme_inverseOnSurface">#1A1C1E</color>
     <color name="md_theme_inversePrimary">#0061A4</color>
     <color name="md_theme_shadow">#000000</color>
+    
+    <!-- TODO: Design Review - Verify these gray values match design system -->
+    <!-- EditText stroke colors for bg_et.xml (dark mode) -->
+    <color name="gray_8">#C2C7CE</color>  <!-- Focused state: lighter gray -->
+    <color name="gray_a">#8C9199</color>  <!-- Normal state: matches md_theme_outline -->
 </resources>

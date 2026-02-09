@@ -1,0 +1,386 @@
+[
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-xhdpi_ic_action_send_now.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-xhdpi/ic_action_send_now.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-xxhdpi_ic_action_replay.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-xxhdpi/ic_action_replay.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-hdpi_ic_stat_notify_recorded.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-hdpi/ic_stat_notify_recorded.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-xxxhdpi_ic_stat_notify_recording.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-xxxhdpi/ic_stat_notify_recording.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-xxhdpi_ticket.9.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-xxhdpi/ticket.9.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-hdpi_ic_star.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-hdpi/ic_star.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-xxxhdpi_paypal_logo_large.jpg.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-xxxhdpi/paypal_logo_large.jpg"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/layout_list_item_header.xml.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/layout/list_item_header.xml"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-xhdpi_ic_action_email.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-xhdpi/ic_action_email.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-xxxhdpi_ic_launcher.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-xxxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/layout_recording_done_dialog.xml.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/layout/recording_done_dialog.xml"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-mdpi_ic_action_collection.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-mdpi/ic_action_collection.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-xxhdpi_ic_launcher.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-xxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-xhdpi_gwall_logo_hrz_fc_rgb_gry_pos.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-xhdpi/gwall_logo_hrz_fc_rgb_gry_pos.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/layout_dialog_save_recording.xml.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/layout/dialog_save_recording.xml"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/layout_fragment_background_recorder.xml.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/layout/fragment_background_recorder.xml"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-mdpi_ic_action_replay.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-mdpi/ic_action_replay.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-hdpi_ic_action_qr.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-hdpi/ic_action_qr.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/anim_pulse.xml.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/anim/pulse.xml"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-mdpi_hand.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-mdpi/hand.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-xhdpi_btn_cling_normal.9.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-xhdpi/btn_cling_normal.9.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-xxhdpi_google_play_button.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-xxhdpi/google_play_button.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-mdpi_btn_cling_pressed.9.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-mdpi/btn_cling_pressed.9.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-hdpi_btn_cling_pressed.9.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-hdpi/btn_cling_pressed.9.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-mdpi_btn_cling_normal.9.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-mdpi/btn_cling_normal.9.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable_ic_arrow_back.xml.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable/ic_arrow_back.xml"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/menu_main_menu.xml.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/menu/main_menu.xml"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable_bg_et.xml.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable/bg_et.xml"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-mdpi_ic_action_play.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-mdpi/ic_action_play.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable_ic_pause.xml.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable/ic_pause.xml"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/layout_fragment_how_to_page.xml.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/layout/fragment_how_to_page.xml"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-xxhdpi_ic_stat_notify_recording.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-xxhdpi/ic_stat_notify_recording.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-mdpi_ic_action_send_now.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-mdpi/ic_action_send_now.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-ldpi_ic_stat_notify_recorded.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-ldpi/ic_stat_notify_recorded.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-hdpi_ic_action_play.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-hdpi/ic_action_play.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-xxhdpi_ic_action_email.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-xxhdpi/ic_action_email.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-xhdpi_cling.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-xhdpi/cling.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-ldpi_ic_star.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-ldpi/ic_star.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-xhdpi_ic_star.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-xhdpi/ic_star.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/layout_activity_background_recorder.xml.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/layout/activity_background_recorder.xml"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-xxhdpi_github_logo.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-xxhdpi/github_logo.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable_ic_delete.xml.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable/ic_delete.xml"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-xxxhdpi_qr_logo.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-xxxhdpi/qr_logo.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-xhdpi_ic_action_play.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-xhdpi/ic_action_play.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-hdpi_ic_action_email.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-hdpi/ic_action_email.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-xxxhdpi_ic_star.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-xxxhdpi/ic_star.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/font_inter_bold.ttf.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/font/inter_bold.ttf"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-xxhdpi_ic_action_play.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-xxhdpi/ic_action_play.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/layout_activity_settings.xml.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/layout/activity_settings.xml"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-hdpi_ic_stat_notify_recording.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-hdpi/ic_stat_notify_recording.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-ldpi_ic_stat_notify_recording.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-ldpi/ic_stat_notify_recording.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable_ic_folder.xml.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable/ic_folder.xml"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-mdpi_ic_stat_notify_recorded.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-mdpi/ic_stat_notify_recorded.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-xhdpi_ic_action_replay.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-xhdpi/ic_action_replay.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-hdpi_ic_action_send_now.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-hdpi/ic_action_send_now.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-xxhdpi_ic_stat_notify_recorded.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-xxhdpi/ic_stat_notify_recorded.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-xhdpi_ic_action_qr.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-xhdpi/ic_action_qr.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-xhdpi_ic_launcher.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-xhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-hdpi_ic_launcher.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-hdpi/ic_launcher.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable_ic_help.xml.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable/ic_help.xml"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/xml_path_provider.xml.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/xml/path_provider.xml"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-xhdpi_ic_stat_notify_recorded.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-xhdpi/ic_stat_notify_recorded.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-hdpi_ic_action_collection.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-hdpi/ic_action_collection.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/layout_bottom_sheet_save_clip.xml.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/layout/bottom_sheet_save_clip.xml"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-xxhdpi_ic_action_send_now.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-xxhdpi/ic_action_send_now.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-mdpi_ic_star.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-mdpi/ic_star.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/font_inter.xml.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/font/inter.xml"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-xhdpi_btn_cling_pressed.9.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-xhdpi/btn_cling_pressed.9.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable_ic_hearing.xml.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable/ic_hearing.xml"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-xxhdpi_ic_love.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-xxhdpi/ic_love.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-xxhdpi_ic_action_qr.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-xxhdpi/ic_action_qr.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-hdpi_btn_cling_normal.9.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-hdpi/btn_cling_normal.9.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-mdpi_ic_action_qr.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-mdpi/ic_action_qr.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/font_inter_regular.ttf.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/font/inter_regular.ttf"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-xhdpi_ic_stat_notify_recording.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-xhdpi/ic_stat_notify_recording.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-mdpi_ic_stat_notify_recording.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-mdpi/ic_stat_notify_recording.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-mdpi_ic_action_email.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-mdpi/ic_action_email.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-xhdpi_ic_action_collection.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-xhdpi/ic_action_collection.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-xxhdpi_ic_action_collection.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-xxhdpi/ic_action_collection.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable_ic_play_arrow.xml.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable/ic_play_arrow.xml"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-hdpi_hand.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-hdpi/hand.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable_ic_save.xml.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable/ic_save.xml"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-xhdpi_hand.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-xhdpi/hand.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable_ic_stop.xml.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable/ic_stop.xml"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/layout_activity_how_to.xml.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/layout/activity_how_to.xml"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-mdpi_ic_launcher.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-mdpi/ic_launcher.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-xxxhdpi_paypal_logo.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-xxxhdpi/paypal_logo.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-xxxhdpi_ic_stat_notify_recorded.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-xxxhdpi/ic_stat_notify_recorded.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-xhdpi_cling_bleached.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-xhdpi/cling_bleached.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-hdpi_cling.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-hdpi/cling.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-hdpi_ic_action_replay.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-hdpi/ic_action_replay.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/layout_list_item_recording.xml.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/layout/list_item_recording.xml"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-xxhdpi_btn_play.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-xxhdpi/btn_play.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/layout_activity_recordings.xml.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/layout/activity_recordings.xml"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-mdpi_cling.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-mdpi/cling.png"
+    },
+    {
+        "merged": "eu.mrogalski.saidit.SaidIt-debug-31:/drawable-ldpi_ic_launcher.png.flat",
+        "source": "eu.mrogalski.saidit.SaidIt-main-33:/drawable-ldpi/ic_launcher.png"
+    }
+]

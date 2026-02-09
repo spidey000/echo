@@ -273,6 +273,8 @@ public class SettingsActivity extends AppCompatActivity {
         else exportFormatToggleGroup.check(R.id.format_wav);
 
         int bitrate = sharedPreferences.getInt("export_bitrate", 32000);
+        bitrate = Math.max(8000, Math.min(64000, bitrate));
+        sharedPreferences.edit().putInt("export_bitrate", bitrate).apply();
         bitrateSlider.setValue(bitrate);
         bitrateValue.setText((bitrate / 1000) + " kbps");
 
@@ -346,6 +348,7 @@ public class SettingsActivity extends AppCompatActivity {
         } else {
             // MP3/Opus - Bitrate is in bits per second, we want bytes per minute
             int bitrate = sharedPreferences.getInt("export_bitrate", 32000);
+            bitrate = Math.max(8000, Math.min(64000, bitrate));
             // Bytes per second = Bitrate / 8
             long bytesPerSecond = bitrate / 8;
             bytesPerMinute = bytesPerSecond * 60;

@@ -1,15 +1,22 @@
 package eu.mrogalski.saidit.export;
 
 public class Lame {
+    private static boolean libraryLoaded = false;
+
     static {
         try {
             System.loadLibrary("mp3lame");
+            libraryLoaded = true;
         } catch (UnsatisfiedLinkError e) {
             // Native library not found.
             // In a real implementation, ensure libmp3lame.so is present in jniLibs.
             // This class serves as a wrapper interface.
             System.err.println("LAME native library not loaded: " + e.getMessage());
         }
+    }
+
+    public static boolean isLibraryLoaded() {
+        return libraryLoaded;
     }
 
     /**

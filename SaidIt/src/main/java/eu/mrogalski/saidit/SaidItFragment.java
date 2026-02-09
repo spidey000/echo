@@ -126,18 +126,13 @@ public class SaidItFragment extends Fragment implements SaveClipBottomSheet.Save
     }
 
     @Override
-    public void onSaveClip(String fileName, float durationInSeconds) {
-        AlertDialog progressDialog = new MaterialAlertDialogBuilder(requireActivity())
-                .setTitle("Saving Recording")
-                .setMessage("Please wait...")
-                .setCancelable(false)
-                .create();
-        progressDialog.show();
-
+    public void onSaveClip(String fileName, float durationInSeconds, String format, int bitrate, int bitDepth) {
         Intent intent = new Intent(getActivity(), SaidItService.class);
         intent.setAction(SaidItService.ACTION_EXPORT_RECORDING);
         intent.putExtra(SaidItService.EXTRA_MEMORY_SECONDS, durationInSeconds);
-        intent.putExtra(SaidItService.EXTRA_FORMAT, "aac");
+        intent.putExtra(SaidItService.EXTRA_FORMAT, format);
+        intent.putExtra(SaidItService.EXTRA_BITRATE, bitrate);
+        intent.putExtra(SaidItService.EXTRA_BIT_DEPTH, bitDepth);
         intent.putExtra(SaidItService.EXTRA_NEW_FILE_NAME, fileName);
         getActivity().startService(intent);
     }
@@ -236,8 +231,12 @@ public class SaidItFragment extends Fragment implements SaveClipBottomSheet.Save
     // --- File Receiver and Notification Logic ---
 
     static Notification buildNotificationForFile(Context context, Uri fileUri, String fileName) {
+        String mimeType = context.getContentResolver().getType(fileUri);
+        if (mimeType == null) {
+            mimeType = "audio/*";
+        }
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(fileUri, "audio/mp4");
+        intent.setDataAndType(fileUri, mimeType);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
@@ -298,19 +297,27 @@ public class SaidItFragment extends Fragment implements SaveClipBottomSheet.Save
                     }
                     new MaterialAlertDialogBuilder(activity)
                             .setTitle(R.string.recording_done_title)
-                            .setMessage("Recording saved to your music folder.")
+                            .setMessage(R.string.recording_saved_to_music_folder)
                             .setPositiveButton(R.string.open, (dialog, which) -> {
+                                String mimeType = activity.getContentResolver().getType(fileUri);
+                                if (mimeType == null) {
+                                    mimeType = "audio/*";
+                                }
                                 Intent intent = new Intent(Intent.ACTION_VIEW);
-                                intent.setDataAndType(fileUri, "audio/mp4");
+                                intent.setDataAndType(fileUri, mimeType);
                                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                                 activity.startActivity(intent);
                             })
                             .setNeutralButton(R.string.share, (dialog, which) -> {
+                                String mimeType = activity.getContentResolver().getType(fileUri);
+                                if (mimeType == null) {
+                                    mimeType = "audio/*";
+                                }
                                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                                shareIntent.setType("audio/mp4");
+                                shareIntent.setType(mimeType);
                                 shareIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
                                 shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                                activity.startActivity(Intent.createChooser(shareIntent, "Send to"));
+                                activity.startActivity(Intent.createChooser(shareIntent, activity.getString(R.string.send_to)));
                             })
                             .setNegativeButton(R.string.dismiss, null)
                             .show();

@@ -15,8 +15,8 @@ public class Mp3Exporter implements AudioExporter {
         
         // Convert bitrate to kbps
         int bitRateKbps = bitRate / 1000;
-        if (bitRateKbps < 32) bitRateKbps = 32; // Standard minimum
-        if (bitRateKbps > 320) bitRateKbps = 320; // Standard maximum
+        if (bitRateKbps < 8) bitRateKbps = 8;
+        if (bitRateKbps > 64) bitRateKbps = 64;
 
         try {
             Lame.init(sampleRate, channels, sampleRate, bitRateKbps, 2); // 2 = High quality

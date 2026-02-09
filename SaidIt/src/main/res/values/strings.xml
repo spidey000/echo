@@ -168,6 +168,12 @@
 
     <string name="error_title">Error</string>
     <string name="error_saving_failed">Failed to save the recording. Please try again.</string>
+    <string name="error_mp3_encoder_unavailable">MP3 export is unavailable on this build.</string>
+    <string name="please_enter_file_name">Please enter a file name</string>
+    <string name="saving_recording_title">Saving Recording</string>
+    <string name="please_wait">Please wait...</string>
+    <string name="recording_saved_to_music_folder">Recording saved to your music folder.</string>
+    <string name="send_to">Send to</string>
 
     <!-- How-To Guide -->
     <string name="how_to_guide">How-To Guide</string>

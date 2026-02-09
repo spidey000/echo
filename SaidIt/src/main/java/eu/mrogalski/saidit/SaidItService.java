@@ -45,6 +45,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import static eu.mrogalski.saidit.SaidIt.AUDIO_MEMORY_ENABLED_KEY;
 import static eu.mrogalski.saidit.SaidIt.AUDIO_MEMORY_SIZE_KEY;
 import static eu.mrogalski.saidit.SaidIt.PACKAGE_NAME;
@@ -112,6 +115,7 @@ public class SaidItService extends Service {
     private int analyzedBytes;
     private Runnable analysisTick;
     private LocalBroadcastManager localBroadcastManager;
+    private long lastAutoSaveAtMs = 0L;
 
     volatile ServiceState state = ServiceState.READY;
 
@@ -198,6 +202,7 @@ public class SaidItService extends Service {
                     break; // Exit the loop on error
                 }
             }
+            maybeAutoSave();
             analysisHandler.postDelayed(analysisTick, frameMs); // Re-schedule
         };
 
@@ -268,11 +273,17 @@ public class SaidItService extends Service {
                         stopRecording(null);
                         break;
                     case ACTION_EXPORT_RECORDING:
+                        Integer bitrate = intent.hasExtra(EXTRA_BITRATE)
+                                ? intent.getIntExtra(EXTRA_BITRATE, 32000)
+                                : null;
+                        Integer bitDepth = intent.hasExtra(EXTRA_BIT_DEPTH)
+                                ? intent.getIntExtra(EXTRA_BIT_DEPTH, 16)
+                                : null;
                         exportRecording(intent.getFloatExtra(EXTRA_MEMORY_SECONDS, 0),
                                 intent.getStringExtra(EXTRA_FORMAT),
-                                intent.getIntExtra(EXTRA_BITRATE, 32000),
-                                intent.getIntExtra(EXTRA_BIT_DEPTH, 16),
-                                null,
+                                bitrate,
+                                bitDepth,
+                                new SaidItFragment.NotifyFileReceiver(this),
                                 intent.getStringExtra(EXTRA_NEW_FILE_NAME));
                         break;
                     case ACTION_GET_STATE:
@@ -470,10 +481,60 @@ public class SaidItService extends Service {
         });
     }
 
-        public void exportRecording(final float memorySeconds, final String format, final WavFileReceiver wavFileReceiver, String newFileName) {
+    public void exportRecording(final float memorySeconds,
+                                final String format,
+                                final Integer bitrate,
+                                final Integer bitDepth,
+                                final WavFileReceiver wavFileReceiver,
+                                String newFileName) {
         if (state == ServiceState.READY) return;
 
-        analysisHandler.post(() -> recordingExporter.export(recordingStoreManager, memorySeconds, format, newFileName, wavFileReceiver));
+        analysisHandler.post(() -> recordingExporter.export(
+                recordingStoreManager,
+                memorySeconds,
+                format,
+                bitrate,
+                bitDepth,
+                newFileName,
+                wavFileReceiver
+        ));
+    }
+
+    private void maybeAutoSave() {
+        if (state != ServiceState.LISTENING) {
+            return;
+        }
+
+        SharedPreferences preferences = getSharedPreferences(PACKAGE_NAME, MODE_PRIVATE);
+        if (!preferences.getBoolean("auto_save_enabled", false)) {
+            return;
+        }
+
+        int autoSaveDuration = preferences.getInt("auto_save_duration", 600);
+        if (autoSaveDuration <= 0) {
+            return;
+        }
+
+        long now = SystemClock.elapsedRealtime();
+        if (lastAutoSaveAtMs > 0 && (now - lastAutoSaveAtMs) < autoSaveDuration * 1000L) {
+            return;
+        }
+
+        if (getMemoryDurationSeconds() < autoSaveDuration) {
+            return;
+        }
+
+        String autoFileName = new SimpleDateFormat("'Echo_auto_'yyyyMMdd_HHmmss", Locale.US).format(new Date());
+        recordingExporter.export(
+                recordingStoreManager,
+                autoSaveDuration,
+                null,
+                null,
+                null,
+                autoFileName,
+                new SaidItFragment.NotifyFileReceiver(this)
+        );
+        lastAutoSaveAtMs = now;
     }
 
     private void flushAudioRecord() {
