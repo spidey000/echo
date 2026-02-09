@@ -26,11 +26,8 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Process;
 import android.os.SystemClock;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
-import android.media.audiofx.AutomaticGainControl;
-import android.media.audiofx.NoiseSuppressor;
 import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import eu.mrogalski.saidit.analysis.SegmentationController;
@@ -42,14 +39,19 @@ import eu.mrogalski.saidit.storage.SimpleRecordingStoreManager;
 import eu.mrogalski.saidit.export.AacExporter;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.file.Files;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import static eu.mrogalski.saidit.SaidIt.AUDIO_MEMORY_ENABLED_KEY;
 import static eu.mrogalski.saidit.SaidIt.AUDIO_MEMORY_SIZE_KEY;
+import static eu.mrogalski.saidit.SaidIt.AUDIO_MEMORY_PRESETS;
+import static eu.mrogalski.saidit.SaidIt.AUTO_SAVE_MAX_FILES_DEFAULT;
+import static eu.mrogalski.saidit.SaidIt.AUTO_SAVE_MAX_FILES_KEY;
+import static eu.mrogalski.saidit.SaidIt.AUTO_SAVE_TRACKED_ENTRIES_KEY;
 import static eu.mrogalski.saidit.SaidIt.PACKAGE_NAME;
 import static eu.mrogalski.saidit.SaidIt.SAMPLE_RATE_KEY;
 
@@ -58,6 +60,7 @@ public class SaidItService extends Service {
     private static final int FOREGROUND_NOTIFICATION_ID = 458;
     private static final String YOUR_NOTIFICATION_CHANNEL_ID = "SaidItServiceChannel";
     private static final String ACTION_AUTO_SAVE = "eu.mrogalski.saidit.ACTION_AUTO_SAVE";
+    private static final float AUTO_SAVE_TRIGGER_RATIO = 0.90f;
 
     public static final String ACTION_START_LISTENING = "eu.mrogalski.saidit.ACTION_START_LISTENING";
     public static final String ACTION_STOP_LISTENING = "eu.mrogalski.saidit.ACTION_STOP_LISTENING";
@@ -96,8 +99,6 @@ public class SaidItService extends Service {
 
     File mediaFile;
     AudioRecord audioRecord; // used only in the audio thread
-    NoiseSuppressor noiseSuppressor; // used only in the audio thread
-    AutomaticGainControl automaticGainControl; // used only in the audio thread
     AacMp4Writer aacWriter; // used only in the audio thread
     final AudioMemory audioMemory = new AudioMemory(new SystemClockWrapper()); // used only in the audio thread
 
@@ -115,7 +116,7 @@ public class SaidItService extends Service {
     private int analyzedBytes;
     private Runnable analysisTick;
     private LocalBroadcastManager localBroadcastManager;
-    private long lastAutoSaveAtMs = 0L;
+    private boolean autoSaveTriggeredInCycle = false;
 
     volatile ServiceState state = ServiceState.READY;
 
@@ -289,6 +290,9 @@ public class SaidItService extends Service {
                     case ACTION_GET_STATE:
                         broadcastState();
                         break;
+                    case ACTION_AUTO_SAVE:
+                        maybeAutoSave();
+                        break;
                 }
             }
         }
@@ -302,7 +306,12 @@ public class SaidItService extends Service {
 
         Log.d(TAG, "Queueing: START LISTENING");
         startService(new Intent(this, this.getClass()));
-        final long memorySize = getSharedPreferences(PACKAGE_NAME, MODE_PRIVATE).getLong(AUDIO_MEMORY_SIZE_KEY, Runtime.getRuntime().maxMemory() / 4);
+        final SharedPreferences preferences = getSharedPreferences(PACKAGE_NAME, MODE_PRIVATE);
+        final long savedMemorySize = preferences.getLong(AUDIO_MEMORY_SIZE_KEY, AUDIO_MEMORY_PRESETS[0]);
+        final long memorySize = SaidIt.nearestAudioMemoryPreset(savedMemorySize);
+        if (savedMemorySize != memorySize) {
+            preferences.edit().putLong(AUDIO_MEMORY_SIZE_KEY, memorySize).apply();
+        }
 
         audioHandler.post(() -> {
             if (isShuttingDown) return;
@@ -322,22 +331,6 @@ public class SaidItService extends Service {
                 return;
             }
             audioRecord = newAudioRecord;
-            
-            final SharedPreferences preferences = getSharedPreferences(PACKAGE_NAME, MODE_PRIVATE);
-            if (NoiseSuppressor.isAvailable()) {
-                noiseSuppressor = NoiseSuppressor.create(audioRecord.getAudioSessionId());
-                if (noiseSuppressor != null) {
-                    noiseSuppressor.setEnabled(preferences.getBoolean("noise_suppressor_enabled", false));
-                    Log.d(TAG, "NoiseSuppressor enabled: " + noiseSuppressor.getEnabled());
-                }
-            }
-            if (AutomaticGainControl.isAvailable()) {
-                automaticGainControl = AutomaticGainControl.create(audioRecord.getAudioSessionId());
-                if (automaticGainControl != null) {
-                    automaticGainControl.setEnabled(preferences.getBoolean("automatic_gain_control_enabled", false));
-                    Log.d(TAG, "AutomaticGainControl enabled: " + automaticGainControl.getEnabled());
-                }
-            }
 
             audioMemory.allocate(memorySize);
             // Set up event-driven periodic callbacks (~50ms)
@@ -379,14 +372,6 @@ public class SaidItService extends Service {
 
         audioHandler.post(() -> {
             Log.d(TAG, "Executing: STOP LISTENING");
-            if (noiseSuppressor != null) {
-                noiseSuppressor.release();
-                noiseSuppressor = null;
-            }
-            if (automaticGainControl != null) {
-                automaticGainControl.release();
-                automaticGainControl = null;
-            }
             if (audioRecord != null) {
                 try {
                     // CRITICAL: Remove listener before stopping
@@ -507,34 +492,175 @@ public class SaidItService extends Service {
 
         SharedPreferences preferences = getSharedPreferences(PACKAGE_NAME, MODE_PRIVATE);
         if (!preferences.getBoolean("auto_save_enabled", false)) {
+            autoSaveTriggeredInCycle = false;
             return;
         }
 
-        int autoSaveDuration = preferences.getInt("auto_save_duration", 600);
-        if (autoSaveDuration <= 0) {
+        AudioMemory.Stats stats = audioMemory.getStats(FILL_RATE);
+        float fillRatio = AutoSavePolicy.getFillRatio(stats);
+        if (fillRatio < AUTO_SAVE_TRIGGER_RATIO) {
+            autoSaveTriggeredInCycle = false;
             return;
         }
-
-        long now = SystemClock.elapsedRealtime();
-        if (lastAutoSaveAtMs > 0 && (now - lastAutoSaveAtMs) < autoSaveDuration * 1000L) {
+        if (autoSaveTriggeredInCycle) {
             return;
         }
+        autoSaveTriggeredInCycle = true;
 
-        if (getMemoryDurationSeconds() < autoSaveDuration) {
+        int maxAutoSaves = getAutoSaveMaxFiles(preferences);
+        float memorySeconds = getMemoryDurationSeconds();
+        if (memorySeconds <= 0f) {
             return;
         }
 
         String autoFileName = new SimpleDateFormat("'Echo_auto_'yyyyMMdd_HHmmss", Locale.US).format(new Date());
         recordingExporter.export(
                 recordingStoreManager,
-                autoSaveDuration,
+                memorySeconds,
                 null,
                 null,
                 null,
                 autoFileName,
-                new SaidItFragment.NotifyFileReceiver(this)
+                new AutoSaveReceiver(autoFileName, maxAutoSaves, new SaidItFragment.NotifyFileReceiver(this))
         );
-        lastAutoSaveAtMs = now;
+    }
+
+    private int getAutoSaveMaxFiles(SharedPreferences preferences) {
+        int maxFiles = preferences.getInt(AUTO_SAVE_MAX_FILES_KEY, AUTO_SAVE_MAX_FILES_DEFAULT);
+        int normalized = Math.max(1, Math.min(100, maxFiles));
+        if (maxFiles != normalized) {
+            preferences.edit().putInt(AUTO_SAVE_MAX_FILES_KEY, normalized).apply();
+        }
+        return normalized;
+    }
+
+    private void recordAutoSaveAndRotate(Uri fileUri, String displayName, int maxAutoSaves) {
+        if (fileUri == null || displayName == null || !displayName.contains("_auto")) {
+            return;
+        }
+
+        List<AutoSaveEntry> entries = loadAutoSaveEntries();
+        String uriString = fileUri.toString();
+        entries.removeIf(entry -> uriString.equals(entry.uri));
+        entries.add(new AutoSaveEntry(uriString, displayName, System.currentTimeMillis()));
+
+        List<AutoSaveEntry> toRotate = AutoSavePolicy.selectAutoEntriesToRotate(entries, maxAutoSaves);
+        for (AutoSaveEntry entry : toRotate) {
+            if (deleteTrackedEntry(entry)) {
+                entries.removeIf(candidate -> candidate.uri.equals(entry.uri));
+            } else {
+                Log.w(TAG, "auto-save rotation skipped for " + entry.uri);
+            }
+        }
+        saveAutoSaveEntries(entries);
+    }
+
+    private boolean deleteTrackedEntry(AutoSaveEntry entry) {
+        try {
+            Uri uri = Uri.parse(entry.uri);
+            getContentResolver().delete(uri, null, null);
+            return true;
+        } catch (SecurityException e) {
+            Log.w(TAG, "auto-save rotation permission_revoked: " + entry.uri, e);
+            return false;
+        } catch (Exception e) {
+            Log.w(TAG, "auto-save rotation delete_failed: " + entry.uri, e);
+            return false;
+        }
+    }
+
+    private List<AutoSaveEntry> loadAutoSaveEntries() {
+        SharedPreferences preferences = getSharedPreferences(PACKAGE_NAME, MODE_PRIVATE);
+        String raw = preferences.getString(AUTO_SAVE_TRACKED_ENTRIES_KEY, "[]");
+        List<AutoSaveEntry> entries = new ArrayList<>();
+        if (raw == null || raw.isEmpty()) {
+            return entries;
+        }
+        try {
+            JSONArray array = new JSONArray(raw);
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject object = array.optJSONObject(i);
+                if (object == null) {
+                    continue;
+                }
+                String uri = object.optString("uri", "");
+                String displayName = object.optString("display_name", "");
+                long savedAt = object.optLong("saved_at_ms", 0L);
+                if (!uri.isEmpty()) {
+                    entries.add(new AutoSaveEntry(uri, displayName, savedAt));
+                }
+            }
+        } catch (Exception e) {
+            Log.w(TAG, "Failed to parse tracked auto-save entries", e);
+        }
+        return entries;
+    }
+
+    private void saveAutoSaveEntries(List<AutoSaveEntry> entries) {
+        JSONArray array = new JSONArray();
+        for (AutoSaveEntry entry : entries) {
+            JSONObject object = new JSONObject();
+            try {
+                object.put("uri", entry.uri);
+                object.put("display_name", entry.displayName);
+                object.put("saved_at_ms", entry.savedAtMs);
+                array.put(object);
+            } catch (Exception e) {
+                Log.w(TAG, "Failed to serialize tracked auto-save entry", e);
+            }
+        }
+        getSharedPreferences(PACKAGE_NAME, MODE_PRIVATE)
+                .edit()
+                .putString(AUTO_SAVE_TRACKED_ENTRIES_KEY, array.toString())
+                .apply();
+    }
+
+    private class AutoSaveReceiver implements WavFileReceiver {
+        private final String displayName;
+        private final int maxAutoSaves;
+        private final WavFileReceiver delegate;
+
+        AutoSaveReceiver(String displayName, int maxAutoSaves, WavFileReceiver delegate) {
+            this.displayName = displayName;
+            this.maxAutoSaves = maxAutoSaves;
+            this.delegate = delegate;
+        }
+
+        @Override
+        public void onSuccess(Uri fileUri) {
+            Runnable rotationTask = () -> recordAutoSaveAndRotate(fileUri, displayName, maxAutoSaves);
+            if (analysisHandler != null) {
+                analysisHandler.post(rotationTask);
+            } else {
+                rotationTask.run();
+            }
+            if (delegate != null) {
+                delegate.onSuccess(fileUri);
+            }
+        }
+
+        @Override
+        public void onFailure(Exception e) {
+            if (delegate != null) {
+                delegate.onFailure(e);
+            }
+        }
+    }
+
+    static class AutoSaveEntry {
+        final String uri;
+        final String displayName;
+        final long savedAtMs;
+
+        AutoSaveEntry(String uri, String displayName, long savedAtMs) {
+            this.uri = uri;
+            this.displayName = displayName;
+            this.savedAtMs = savedAtMs;
+        }
+
+        boolean isAuto() {
+            return displayName != null && displayName.contains("_auto");
+        }
     }
 
     private void flushAudioRecord() {
@@ -566,11 +692,12 @@ public class SaidItService extends Service {
     }
 
     public void setMemorySize(final long memorySize) {
+        final long normalizedMemorySize = SaidIt.nearestAudioMemoryPreset(memorySize);
         final SharedPreferences preferences = this.getSharedPreferences(PACKAGE_NAME, MODE_PRIVATE);
-        preferences.edit().putLong(AUDIO_MEMORY_SIZE_KEY, memorySize).apply();
+        preferences.edit().putLong(AUDIO_MEMORY_SIZE_KEY, normalizedMemorySize).apply();
 
         if(preferences.getBoolean(AUDIO_MEMORY_ENABLED_KEY, true)) {
-            audioHandler.post(() -> audioMemory.allocate(memorySize));
+            audioHandler.post(() -> audioMemory.allocate(normalizedMemorySize));
         }
     }
 
@@ -630,6 +757,10 @@ public class SaidItService extends Service {
         if (audioMemory == null) return 0f;
         final AudioMemory.Stats stats = audioMemory.getStats(FILL_RATE);
         return (stats.overwriting ? stats.total : stats.filled) * getBytesToSeconds();
+    }
+
+    public long getEstimatedAutoSaveHistorySeconds(int maxAutoSaves) {
+        return AutoSavePolicy.estimatedTotalHistorySeconds(getMemorySize(), getBytesToSeconds(), maxAutoSaves);
     }
 
 
