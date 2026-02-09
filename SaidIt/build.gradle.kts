@@ -21,7 +21,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "eu.mrogalski.saidit"
+        applicationId = "com.spidey000.echofork"
         minSdk = 30
         targetSdk = 34
         versionCode = 15
