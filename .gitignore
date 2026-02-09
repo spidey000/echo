@@ -1,0 +1,29 @@
+# Gradle and build outputs
+.gradle/
+build/
+**/build/
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+
+# Local SDK and machine-specific settings
+local.properties
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Android binaries and packaged artifacts
+*.apk
+*.aab
+
+# Native build intermediates
+.cxx/
+externalNativeBuild/
+
+# Tooling folders
+.claude/
