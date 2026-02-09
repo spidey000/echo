@@ -184,6 +184,7 @@ public class AudioMemory {
             final Stats stats = new Stats();
             stats.filled = size;
             stats.total = capacity;
+            stats.writePos = writePos;
             stats.estimation = (int) (filling ? 
                 (clock.uptimeMillis() - fillingStartUptimeMillis) * fillRate / 1000 : 0);
             stats.overwriting = overwriting;
@@ -196,6 +197,7 @@ public class AudioMemory {
     public static class Stats {
         public int filled;
         public int total;
+        public int writePos;
         public int estimation;
         public boolean overwriting;
     }

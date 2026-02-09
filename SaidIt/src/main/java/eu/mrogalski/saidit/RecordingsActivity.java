@@ -53,8 +53,15 @@ public class RecordingsActivity extends AppCompatActivity {
                 MediaStore.Audio.Media.DATE_ADDED,
                 MediaStore.Audio.Media.DURATION
         };
-        String selection = MediaStore.Audio.Media.MIME_TYPE + " IN (?, ?, ?)";
-        String[] selectionArgs = new String[]{"audio/mp4", "audio/m4a", "audio/aac"};
+        String selection = MediaStore.Audio.Media.MIME_TYPE + " IN (?, ?, ?, ?, ?, ?)";
+        String[] selectionArgs = new String[]{
+                "audio/mp4",
+                "audio/m4a",
+                "audio/aac",
+                "audio/wav",
+                "audio/mpeg",
+                "audio/ogg"
+        };
         String sortOrder = MediaStore.Audio.Media.DATE_ADDED + " DESC";
 
         try (Cursor cursor = getApplicationContext().getContentResolver().query(

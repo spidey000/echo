@@ -120,14 +120,10 @@
 
     <string name="audio_memory_holds">Audio memory is limited at</string>
     <string name="audio_memory_change">You can change it by tweaking:</string>
-    <string name="option_a_used_ram">A) System memory in use</string>
-    <string name="option_b_audio_quality">B) Sound quality</string>
-    <string name="used_ram_description">Echo and other apps use system memory to keep their data. Large system memory consumption may slow other apps.</string>
+    <string name="option_a_used_ram">Recording buffer (RAM)</string>
+    <string name="option_b_audio_quality">Sound quality</string>
+    <string name="used_ram_description">This buffer stores recent audio in RAM. Higher values keep more history but can affect other apps.</string>
     <string name="audio_quality_description">Higher quality settings will use more memory and battery.</string>
-    <string name="audio_processing_title">Audio Processing</string>
-    <string name="audio_processing_description">Apply real-time effects to enhance audio. May increase battery usage.</string>
-    <string name="noise_suppressor_title">Noise Suppression</string>
-    <string name="automatic_gain_control_title">Automatic Gain Control</string>
     <string name="settings_return">Return</string>
 
     <!-- Others -->
@@ -155,8 +151,12 @@
     <string name="thirty_minutes">30 minutes</string>
     <string name="all_memory">All memory</string>
     <string name="auto_save_title">Auto-save</string>
-    <string name="auto_save_description">Automatically save recordings when the memory buffer is full.</string>
+    <string name="auto_save_description">Automatically save once when RAM usage reaches 90% in each fill cycle.</string>
     <string name="auto_save_duration_title">Auto-save duration</string>
+    <string name="auto_save_max_files_label">Max auto-saves</string>
+    <string name="auto_save_max_files_value">%1$d files</string>
+    <string name="auto_save_estimated_history_value">Estimated total auto-save history: %1$s</string>
+    <string name="auto_save_estimated_history_disabled">Estimated total auto-save history: Off</string>
     <string name="listening">Listening</string>
     <string name="disabled">Disabled</string>
     <string name="settings">Settings</string>
@@ -172,8 +172,9 @@
     <string name="please_enter_file_name">Please enter a file name</string>
     <string name="saving_recording_title">Saving Recording</string>
     <string name="please_wait">Please wait...</string>
-    <string name="recording_saved_to_music_folder">Recording saved to your music folder.</string>
+    <string name="recording_saved_to_music_folder">Recording saved to your selected save location.</string>
     <string name="send_to">Send to</string>
+    <string name="save_location_fallback_used">Custom save location unavailable. Saved to default music folder.</string>
 
     <!-- How-To Guide -->
     <string name="how_to_guide">How-To Guide</string>
@@ -203,4 +204,37 @@
     <string name="export_bitrate_title">Bitrate</string>
     <string name="export_bit_depth_title">Bit Depth</string>
     <string name="estimated_size_per_minute">Estimated size: %s/min</string>
+    <string name="save_location_title">Save Location</string>
+    <string name="save_location_description">Choose where manual and auto-saved recordings are written.</string>
+    <string name="save_location_default">Music/Audio Memory</string>
+    <string name="save_location_custom">Custom folder</string>
+    <string name="save_location_not_selected">No custom folder selected</string>
+    <string name="save_location_unknown_folder">Custom folder</string>
+    <string name="save_location_status_default">Using default location</string>
+    <string name="save_location_status_custom_ok">Custom folder access granted</string>
+    <string name="save_location_status_custom_missing">Choose a custom folder to start saving there</string>
+    <string name="save_location_status_custom_revoked">Folder access was revoked. App will fall back to default.</string>
+    <string name="save_location_default_path_format">Default path: %1$s</string>
+    <string name="save_location_custom_path_format">Custom path: %1$s</string>
+    <string name="save_location_active_path_format">Active: %1$s</string>
+    <string name="pick_folder">Pick folder</string>
+    <string name="reset_to_default">Reset to default</string>
+    <string name="summary_title">Current configuration</string>
+    <string name="summary_buffer_label">Buffer in RAM</string>
+    <string name="summary_quality_label">Quality</string>
+    <string name="summary_size_label">Estimated size</string>
+    <string name="summary_autosave_label">Auto-save</string>
+    <string name="summary_stability_label">Stability</string>
+    <string name="summary_quality_value">%1$d kHz</string>
+    <string name="summary_size_value">%1$s/min</string>
+    <string name="summary_autosave_disabled">Off</string>
+    <string name="summary_autosave_value">%1$d files (~%2$s)</string>
+    <string name="summary_stability_high">High</string>
+    <string name="summary_stability_medium">Medium</string>
+    <string name="summary_stability_low">Low</string>
+    <string name="storage_and_export_title">Storage &amp; Export</string>
+    <string name="memory_preset_32">32 MB</string>
+    <string name="memory_preset_64">64 MB</string>
+    <string name="memory_preset_128">128 MB</string>
+    <string name="memory_preset_256">256 MB</string>
 </resources>
