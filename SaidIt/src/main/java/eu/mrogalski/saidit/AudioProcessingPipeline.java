@@ -95,13 +95,25 @@ public class AudioProcessingPipeline {
                 }
             });
             
+            isRunning.set(true);
+        } catch (Exception criticalError) {
+            Log.e(TAG, "Failed to start pipeline (critical)", criticalError);
+            stop(); // Clean up partial initialization for critical startup failures
+            return;
+        }
+
+        try {
             audioClassifier = new AudioEventClassifier();
             audioClassifier.load(context, "yamnet_tiny.tfile", "yamnet_tiny_labels.txt");
-            
-            isRunning.set(true);
-        } catch (Exception e) {
-            Log.e(TAG, "Failed to start pipeline", e);
-            stop(); // Clean up partial initialization
+        } catch (Exception optionalError) {
+            Log.w(TAG, "classifier_unavailable_fallback", optionalError);
+            if (audioClassifier != null) {
+                try {
+                    audioClassifier.close();
+                } catch (Exception ignored) {
+                }
+            }
+            audioClassifier = null;
         }
     }
     

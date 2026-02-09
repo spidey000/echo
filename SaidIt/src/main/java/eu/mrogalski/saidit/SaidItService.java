@@ -474,8 +474,27 @@ public class SaidItService extends Service {
                                 String newFileName) {
         if (state == ServiceState.READY) return;
 
-        analysisHandler.post(() -> recordingExporter.export(
-                recordingStoreManager,
+        Handler handler = analysisHandler;
+        if (handler == null || isShuttingDown) {
+            notifyExportFailure(wavFileReceiver, new IOException("Export unavailable: service not ready."));
+            return;
+        }
+
+        RecordingStoreManager store = recordingStoreManager;
+        if (store == null && audioProcessingPipeline != null) {
+            store = audioProcessingPipeline.getRecordingStoreManager();
+            recordingStoreManager = store;
+        }
+
+        if (store == null) {
+            Log.w(TAG, "export_aborted_recording_store_unavailable");
+            notifyExportFailure(wavFileReceiver, new IOException("Export unavailable: recording store not initialized."));
+            return;
+        }
+
+        final RecordingStoreManager finalStore = store;
+        handler.post(() -> recordingExporter.export(
+                finalStore,
                 memorySeconds,
                 format,
                 bitrate,
@@ -483,6 +502,13 @@ public class SaidItService extends Service {
                 newFileName,
                 wavFileReceiver
         ));
+    }
+
+    private void notifyExportFailure(WavFileReceiver receiver, IOException error) {
+        if (receiver == null) {
+            return;
+        }
+        new Handler(Looper.getMainLooper()).post(() -> receiver.onFailure(error));
     }
 
     private void maybeAutoSave() {

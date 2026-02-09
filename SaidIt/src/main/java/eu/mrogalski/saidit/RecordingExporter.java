@@ -57,6 +57,16 @@ public class RecordingExporter {
                        Integer bitDepthOverride,
                        String newFileName,
                        SaidItService.WavFileReceiver wavFileReceiver) {
+        if (recordingStoreManager == null) {
+            IOException error = new IOException("Recording store unavailable.");
+            Log.e(TAG, "Export aborted: recording store unavailable");
+            showToast(mContext.getString(R.string.error_saving_recording));
+            if (wavFileReceiver != null) {
+                wavFileReceiver.onFailure(error);
+            }
+            return;
+        }
+
         File exportFile = null;
         File pcmFile = null;
         File encodedFile = null;
@@ -261,6 +271,8 @@ public class RecordingExporter {
             return destinationUri;
         } catch (SecurityException e) {
             Log.w(TAG, "custom_tree permission_revoked while writing", e);
+        } catch (IllegalArgumentException e) {
+            Log.w(TAG, "custom_tree invalid_document_uri", e);
         } catch (IOException e) {
             Log.w(TAG, "custom_tree write_failed", e);
         }
