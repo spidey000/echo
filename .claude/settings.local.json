@@ -1,8 +1,0 @@
-{
-  "enabledMcpjsonServers": [
-    "spawner",
-    "context7",
-    "playwright"
-  ],
-  "enableAllProjectMcpServers": true
-}
