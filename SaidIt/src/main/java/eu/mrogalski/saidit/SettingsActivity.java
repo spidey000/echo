@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,6 +36,14 @@ public class SettingsActivity extends AppCompatActivity {
     private SwitchMaterial automaticGainControlSwitch;
     private Slider autoSaveDurationSlider;
     private TextView autoSaveDurationLabel;
+
+    private MaterialButtonToggleGroup exportFormatToggleGroup;
+    private LinearLayout bitrateContainer;
+    private Slider bitrateSlider;
+    private TextView bitrateValue;
+    private LinearLayout bitDepthContainer;
+    private MaterialButtonToggleGroup bitDepthToggleGroup;
+    private TextView estimatedSizeText;
 
     private SharedPreferences sharedPreferences;
 
@@ -104,6 +113,15 @@ public class SettingsActivity extends AppCompatActivity {
         automaticGainControlSwitch = findViewById(R.id.automatic_gain_control_switch);
         autoSaveDurationSlider = findViewById(R.id.auto_save_duration_slider);
         autoSaveDurationLabel = findViewById(R.id.auto_save_duration_label);
+
+        exportFormatToggleGroup = findViewById(R.id.export_format_toggle_group);
+        bitrateContainer = findViewById(R.id.bitrate_container);
+        bitrateSlider = findViewById(R.id.bitrate_slider);
+        bitrateValue = findViewById(R.id.bitrate_value);
+        bitDepthContainer = findViewById(R.id.bit_depth_container);
+        bitDepthToggleGroup = findViewById(R.id.bit_depth_toggle_group);
+        estimatedSizeText = findViewById(R.id.estimated_size_text);
+
         Button howToButton = findViewById(R.id.how_to_button);
         Button showTourButton = findViewById(R.id.show_tour_button);
 
@@ -152,6 +170,37 @@ public class SettingsActivity extends AppCompatActivity {
             if (fromUser) {
                 sharedPreferences.edit().putInt("auto_save_duration", minutes * 60).apply();
             }
+        });
+
+        exportFormatToggleGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if (isChecked) {
+                String format = "wav";
+                if (checkedId == R.id.format_mp3) format = "mp3";
+                else if (checkedId == R.id.format_opus) format = "opus";
+
+                sharedPreferences.edit().putString("export_format", format).apply();
+                updateExportSettingsUI(format);
+            }
+        });
+
+        bitrateSlider.addOnChangeListener((slider, value, fromUser) -> {
+            int bitrate = (int) value;
+            bitrateValue.setText((bitrate / 1000) + " kbps");
+            if (fromUser) {
+                sharedPreferences.edit().putInt("export_bitrate", bitrate).apply();
+            }
+            updateEstimatedSize();
+        });
+
+        bitDepthToggleGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if (isChecked) {
+                int depth = 16;
+                if (checkedId == R.id.depth_24) depth = 24;
+                else if (checkedId == R.id.depth_32) depth = 32;
+
+                sharedPreferences.edit().putInt("export_bit_depth", depth).apply();
+            }
+            updateEstimatedSize();
         });
     }
 
@@ -217,6 +266,23 @@ public class SettingsActivity extends AppCompatActivity {
 
         updateHistoryLimit();
 
+        // Load export settings
+        String format = sharedPreferences.getString("export_format", "wav");
+        if ("mp3".equals(format)) exportFormatToggleGroup.check(R.id.format_mp3);
+        else if ("opus".equals(format)) exportFormatToggleGroup.check(R.id.format_opus);
+        else exportFormatToggleGroup.check(R.id.format_wav);
+
+        int bitrate = sharedPreferences.getInt("export_bitrate", 32000);
+        bitrateSlider.setValue(bitrate);
+        bitrateValue.setText((bitrate / 1000) + " kbps");
+
+        int bitDepth = sharedPreferences.getInt("export_bit_depth", 16);
+        if (bitDepth == 24) bitDepthToggleGroup.check(R.id.depth_24);
+        else if (bitDepth == 32) bitDepthToggleGroup.check(R.id.depth_32);
+        else bitDepthToggleGroup.check(R.id.depth_16);
+
+        updateExportSettingsUI(format);
+
         // Re-add listeners
         memoryToggleGroup.addOnButtonCheckedListener(memoryToggleListener);
         qualityToggleGroup.addOnButtonCheckedListener(qualityToggleListener);
@@ -251,5 +317,41 @@ public class SettingsActivity extends AppCompatActivity {
                 autoSaveDurationLabel.setText(getString(R.string.time_join, hourText, minuteText));
             }
         }
+    }
+
+    private void updateExportSettingsUI(String format) {
+        if ("wav".equals(format)) {
+            bitrateContainer.setVisibility(android.view.View.GONE);
+            bitDepthContainer.setVisibility(android.view.View.VISIBLE);
+        } else {
+            bitrateContainer.setVisibility(android.view.View.VISIBLE);
+            bitDepthContainer.setVisibility(android.view.View.GONE);
+        }
+        updateEstimatedSize();
+    }
+
+    private void updateEstimatedSize() {
+        if (!isBound || service == null) return;
+
+        long bytesPerMinute = 0;
+        String format = sharedPreferences.getString("export_format", "wav");
+
+        if ("wav".equals(format)) {
+            int depth = sharedPreferences.getInt("export_bit_depth", 16);
+            int sampleRate = service.getSamplingRate();
+            int channels = 1; // Assuming Mono
+            // Bytes per second = SampleRate * Channels * (Depth / 8)
+            long bytesPerSecond = (long)sampleRate * channels * (depth / 8);
+            bytesPerMinute = bytesPerSecond * 60;
+        } else {
+            // MP3/Opus - Bitrate is in bits per second, we want bytes per minute
+            int bitrate = sharedPreferences.getInt("export_bitrate", 32000);
+            // Bytes per second = Bitrate / 8
+            long bytesPerSecond = bitrate / 8;
+            bytesPerMinute = bytesPerSecond * 60;
+        }
+
+        // Need to format bytesPerMinute properly
+        estimatedSizeText.setText(getString(R.string.estimated_size_per_minute, StringFormat.shortFileSize(bytesPerMinute)));
     }
 }

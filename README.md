@@ -39,6 +39,12 @@ Echo is a modern Android application that continuously records audio in the back
 
 We welcome contributions! Please feel free to open an issue or submit a pull request.
 
+## Project Documentation
+
+- **Project Memory:** See [PROJECT_MEMORY.md](PROJECT_MEMORY.md) for current state of implementations, technical decisions, and in-progress features
+- **Feature Plans:** See [feature_audio_export_plan.md](feature_audio_export_plan.md) for audio export feature implementation plan
+- **Progress Tracking:** See [AUDIO_EXPORT_PROGRESS.md](AUDIO_EXPORT_PROGRESS.md) for detailed implementation status of audio export feature
+
 ## Future Development
 
-For a detailed roadmap of planned features and improvements, please see the [`spec.md`](spec.md) file.
+For a detailed roadmap of planned features and improvements, please see [PROJECT_MEMORY.md](PROJECT_MEMORY.md).

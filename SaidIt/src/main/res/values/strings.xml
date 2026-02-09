@@ -190,4 +190,11 @@
     <string name="tour_bottom_buttons_desc">Use these buttons to access your saved recordings or change the app\'s settings.</string>
     <string name="show_tour">Show Tour</string>
     <string name="no_recordings_yet">No recordings yet.</string>
+    
+    <!-- Export Settings -->
+    <string name="export_settings_title">Export Settings</string>
+    <string name="export_format_title">Format</string>
+    <string name="export_bitrate_title">Bitrate</string>
+    <string name="export_bit_depth_title">Bit Depth</string>
+    <string name="estimated_size_per_minute">Estimated size: %s/min</string>
 </resources>

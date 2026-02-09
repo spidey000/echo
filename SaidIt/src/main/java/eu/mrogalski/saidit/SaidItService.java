@@ -67,6 +67,8 @@ public class SaidItService extends Service {
     public static final String EXTRA_PREPENDED_MEMORY_SECONDS = "eu.mrogalski.saidit.EXTRA_PREPENDED_MEMORY_SECONDS";
     public static final String EXTRA_MEMORY_SECONDS = "eu.mrogalski.saidit.EXTRA_MEMORY_SECONDS";
     public static final String EXTRA_FORMAT = "eu.mrogalski.saidit.EXTRA_FORMAT";
+    public static final String EXTRA_BITRATE = "eu.mrogalski.saidit.EXTRA_BITRATE";
+    public static final String EXTRA_BIT_DEPTH = "eu.mrogalski.saidit.EXTRA_BIT_DEPTH";
     public static final String EXTRA_NEW_FILE_NAME = "eu.mrogalski.saidit.EXTRA_NEW_FILE_NAME";
     public static final String EXTRA_LISTENING_ENABLED = "eu.mrogalski.saidit.EXTRA_LISTENING_ENABLED";
     public static final String EXTRA_RECORDING = "eu.mrogalski.saidit.EXTRA_RECORDING";
@@ -268,6 +270,8 @@ public class SaidItService extends Service {
                     case ACTION_EXPORT_RECORDING:
                         exportRecording(intent.getFloatExtra(EXTRA_MEMORY_SECONDS, 0),
                                 intent.getStringExtra(EXTRA_FORMAT),
+                                intent.getIntExtra(EXTRA_BITRATE, 32000),
+                                intent.getIntExtra(EXTRA_BIT_DEPTH, 16),
                                 null,
                                 intent.getStringExtra(EXTRA_NEW_FILE_NAME));
                         break;
