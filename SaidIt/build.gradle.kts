@@ -24,20 +24,38 @@ android {
         applicationId = "com.spidey000.echofork"
         minSdk = 30
         targetSdk = 34
-        versionCode = 15
-        versionName = "2.0.0"
+        versionCode = 19
+        versionName = "2.0.3"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        create("release") {
+            storeFile = file(System.getProperty("user.home") + "/.android/debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
     }
 
     buildTypes {
         release {
             isMinifyEnabled = true
+            signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 file("proguard.cfg")
             )
         }
         debug {}
+    }
+
+    applicationVariants.configureEach {
+        outputs.all {
+            val output = this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
+            val versionName = android.defaultConfig.versionName ?: "unknown"
+            output.outputFileName = "SaidIt-${name}-${versionName}.apk"
+        }
     }
 
     lint { abortOnError = false }

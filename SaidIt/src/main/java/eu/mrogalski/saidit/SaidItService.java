@@ -521,6 +521,7 @@ public class SaidItService extends Service {
         DebugLogStore.log(this, TAG, "export_dispatch memorySeconds=" + memorySeconds + " format=" + format + " fileName=" + newFileName);
         handler.post(() -> recordingExporter.export(
                 finalStore,
+                audioMemory,
                 memorySeconds,
                 format,
                 bitrate,
@@ -561,6 +562,7 @@ public class SaidItService extends Service {
 
         int maxAutoSaves = getAutoSaveMaxFiles(preferences);
         float memorySeconds = getMemoryDurationSeconds();
+        Log.d(TAG, "maybeAutoSave: memorySeconds=" + memorySeconds + " audioMemory=" + (audioMemory != null ? "present" : "null") + " recordingStoreManager=" + (recordingStoreManager != null ? "present" : "null"));
         if (memorySeconds <= 0f) {
             return;
         }
@@ -568,6 +570,7 @@ public class SaidItService extends Service {
         String autoFileName = new SimpleDateFormat("'Echo_auto_'yyyyMMdd_HHmmss", Locale.US).format(new Date());
         recordingExporter.export(
                 recordingStoreManager,
+                audioMemory,
                 memorySeconds,
                 null,
                 null,

@@ -51,15 +51,18 @@ public class RecordingExporter {
     }
 
     public void export(RecordingStoreManager recordingStoreManager,
+                       AudioMemory audioMemory,
                        float memorySeconds,
                        String format,
                        Integer bitrateOverride,
                        Integer bitDepthOverride,
                        String newFileName,
                        SaidItService.WavFileReceiver wavFileReceiver) {
+        Log.i(TAG, "export: START - memorySeconds=" + memorySeconds + " format=" + format + " fileName=" + newFileName);
+        
         if (recordingStoreManager == null) {
             IOException error = new IOException("Recording store unavailable.");
-            Log.e(TAG, "Export aborted: recording store unavailable");
+            Log.e(TAG, "export: recording store null", error);
             DebugLogStore.logError(mContext, TAG, "export_aborted_recording_store_unavailable", error);
             showToast(mContext.getString(R.string.error_saving_recording));
             if (wavFileReceiver != null) {
@@ -78,20 +81,43 @@ public class RecordingExporter {
 
             String fileName = newFileName != null ? newFileName.replaceAll("[^a-zA-Z0-9.-]", "_") : "SaidIt_export";
             DebugLogStore.log(mContext, TAG, "export_start memorySeconds=" + memorySeconds + " format=" + selectedFormat + " fileName=" + fileName);
+            Log.i(TAG, "export: audioMemory=" + (audioMemory != null ? "present" : "null") + " recordingStoreManager=" + (recordingStoreManager != null ? "present" : "null"));
+
             exportFile = recordingStoreManager.export(memorySeconds, fileName);
+            Log.d(TAG, "export: segment export result=" + (exportFile != null ? exportFile.getAbsolutePath() : "null"));
+
+            if (exportFile == null && audioMemory != null) {
+                DebugLogStore.log(mContext, TAG, "export_fallback_to_memory memorySeconds=" + memorySeconds);
+                Log.i(TAG, "export: falling back to audioMemory");
+                exportFile = recordingStoreManager.exportFromBuffer(audioMemory, memorySeconds, fileName);
+                Log.d(TAG, "export: memory export result=" + (exportFile != null ? exportFile.getAbsolutePath() : "null"));
+            } else if (exportFile == null && audioMemory == null) {
+                Log.w(TAG, "export: audioMemory is null, cannot fallback");
+            }
 
             if (exportFile == null) {
                 throw new IOException("No audio available for export.");
             }
 
+            Log.i(TAG, "export: exportFile ready, starting conversion");
             String displayNameBase = newFileName != null ? newFileName : "SaidIt Recording";
             if ("wav".equals(selectedFormat) && bitDepth == 16) {
+                Log.i(TAG, "export: saving as WAV directly");
                 saveFileToMediaStore(exportFile, displayNameBase + ".wav", "audio/wav", wavFileReceiver);
             } else {
+                Log.i(TAG, "export: extracting PCM and encoding to " + selectedFormat);
                 pcmFile = extractPcmFromWav(exportFile, fileName + "_pcm");
                 encodedFile = buildEncodedFile(fileName, selectedFormat);
-                AudioExporter exporter = createExporter(selectedFormat);
-                exporter.export(pcmFile, encodedFile, mSampleRate, 1, "wav".equals(selectedFormat) ? bitDepth : bitRate);
+                AudioExporter exporter = null;
+                try {
+                    exporter = createExporter(selectedFormat);
+                    Log.i(TAG, "export: starting export with " + exporter.getClass().getSimpleName());
+                    exporter.export(pcmFile, encodedFile, mSampleRate, 1, "wav".equals(selectedFormat) ? bitDepth : bitRate);
+                    Log.i(TAG, "export: encoding complete, saving to MediaStore");
+                } catch (Exception e) {
+                    Log.e(TAG, "export: error during encoding with " + (exporter != null ? exporter.getClass().getSimpleName() : "null"), e);
+                    throw e;
+                }
 
                 saveFileToMediaStore(
                         encodedFile,
@@ -100,30 +126,34 @@ public class RecordingExporter {
                         wavFileReceiver
                 );
             }
+            
+            Log.i(TAG, "export: SUCCESS");
         } catch (UnsatisfiedLinkError e) {
-            Log.e(TAG, "Missing native dependency for export", e);
+            Log.e(TAG, "export: Missing native dependency for export", e);
             DebugLogStore.logError(mContext, TAG, "export_native_dependency_missing", e);
             showToast(mContext.getString(R.string.error_mp3_encoder_unavailable));
             if (wavFileReceiver != null) {
                 wavFileReceiver.onFailure(new IOException("MP3 encoder library is unavailable.", e));
             }
-        } catch (IOException e) {
-            Log.e(TAG, "ERROR exporting file", e);
+        } catch (Exception e) {
+            Log.e(TAG, "export: ERROR - unexpected exception", e);
             DebugLogStore.logError(mContext, TAG, "export_failed", e);
             showToast(mContext.getString(R.string.error_saving_recording));
             if (wavFileReceiver != null) {
                 wavFileReceiver.onFailure(e);
             }
         } finally {
+            Log.d(TAG, "export: cleanup starting");
             if (exportFile != null && exportFile.exists() && !exportFile.delete()) {
-                Log.w(TAG, "Could not delete export file: " + exportFile.getAbsolutePath());
+                Log.w(TAG, "export: Could not delete export file: " + exportFile.getAbsolutePath());
             }
             if (pcmFile != null && pcmFile.exists() && !pcmFile.delete()) {
-                Log.w(TAG, "Could not delete temp pcm file: " + pcmFile.getAbsolutePath());
+                Log.w(TAG, "export: Could not delete temp pcm file: " + pcmFile.getAbsolutePath());
             }
             if (encodedFile != null && encodedFile.exists() && !encodedFile.delete()) {
-                Log.w(TAG, "Could not delete encoded file: " + encodedFile.getAbsolutePath());
+                Log.w(TAG, "export: Could not delete encoded file: " + encodedFile.getAbsolutePath());
             }
+            Log.i(TAG, "export: END");
         }
     }
 
@@ -139,7 +169,9 @@ public class RecordingExporter {
         switch (format) {
             case "mp3":
                 if (!Lame.isLibraryLoaded()) {
-                    throw new IOException("MP3 encoder is unavailable on this build.");
+                    Log.w(TAG, "MP3 encoder not available, falling back to Opus");
+                    // Fallback to Opus instead of throwing
+                    return new OpusExporter();
                 }
                 return new Mp3Exporter();
             case "opus":

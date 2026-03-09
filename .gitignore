@@ -21,6 +21,10 @@ Thumbs.db
 *.apk
 *.aab
 
+# Keystores (security sensitive)
+*.jks
+*.keystore
+
 # Native build intermediates
 .cxx/
 externalNativeBuild/

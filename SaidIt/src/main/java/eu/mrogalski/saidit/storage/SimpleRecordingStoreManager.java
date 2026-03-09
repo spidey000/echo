@@ -17,7 +17,9 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicLong;
 
+import eu.mrogalski.saidit.AudioMemory;
 import eu.mrogalski.saidit.R;
 import simplesound.pcm.WavAudioFormat;
 import simplesound.pcm.WavFileWriter;
@@ -149,6 +151,101 @@ public class SimpleRecordingStoreManager implements RecordingStoreManager {
         }
 
         writer.close();
+        return exportFile;
+    }
+
+    @Override
+    public File exportFromBuffer(Object audioMemory, float durationSeconds, String fileName) throws IOException {
+        Log.i(TAG, "exportFromBuffer: START - fileName=" + fileName + " durationSeconds=" + durationSeconds);
+        
+        if (!(audioMemory instanceof AudioMemory)) {
+            Log.w(TAG, "exportFromBuffer: audioMemory is not an AudioMemory instance, type=" + (audioMemory != null ? audioMemory.getClass().getName() : "null"));
+            return null;
+        }
+
+        AudioMemory memory = (AudioMemory) audioMemory;
+        // Get stats with proper fill rate (sampleRate * 2 bytes per second)
+        AudioMemory.Stats stats = memory.getStats(sampleRate * 2);
+
+        Log.i(TAG, "exportFromBuffer: AudioMemory stats - filled=" + stats.filled + " bytes, total=" + stats.total + ", overwriting=" + stats.overwriting);
+        
+        if (stats.filled <= 0) {
+            Log.w(TAG, "exportFromBuffer: AudioMemory is EMPTY (filled=" + stats.filled + "), cannot export");
+            return null;
+        }
+
+        // Calculate how many bytes we actually want to export
+        long requestedBytes = (long) (durationSeconds * sampleRate * 2);
+        long bytesToExport = Math.min(requestedBytes, stats.filled);
+        Log.i(TAG, "exportFromBuffer: requested=" + requestedBytes + " bytes, will export=" + bytesToExport + " bytes");
+
+        File exportFile = new File(context.getCacheDir(), fileName + ".wav");
+        final WavFileWriter[] writerRef = new WavFileWriter[1];
+        AtomicLong bytesWritten = new AtomicLong(0);
+
+        try {
+            writerRef[0] = new WavFileWriter(WavAudioFormat.wavFormat(sampleRate, 16, 1), exportFile);
+            Log.d(TAG, "exportFromBuffer: WAV file created at " + exportFile.getAbsolutePath());
+
+            // Dump audio data from memory to file
+            memory.dump((byte[] buffer, int offset, int count) -> {
+                WavFileWriter writer = writerRef[0];
+                if (writer == null) {
+                    Log.e(TAG, "exportFromBuffer: writer is null in lambda!");
+                    return 0;
+                }
+                
+                if (bytesWritten.get() >= bytesToExport) {
+                    return 0;
+                }
+                int toWrite = (int) Math.min(count, bytesToExport - bytesWritten.get());
+                try {
+                    writer.write(buffer, offset, toWrite);
+                    bytesWritten.addAndGet(toWrite);
+                    if (bytesWritten.get() % 8192 == 0 || bytesWritten.get() == bytesToExport) {
+                        Log.d(TAG, "exportFromBuffer: progress - written=" + bytesWritten.get() + "/" + bytesToExport);
+                    }
+                } catch (IOException e) {
+                    Log.e(TAG, "exportFromBuffer: ERROR writing to export file", e);
+                }
+                return toWrite;
+            }, (int) bytesToExport);
+            
+            Log.d(TAG, "exportFromBuffer: dump completed, total written=" + bytesWritten.get());
+        } catch (Exception e) {
+            Log.e(TAG, "exportFromBuffer: EXCEPTION during export", e);
+            if (writerRef[0] != null) {
+                try {
+                    writerRef[0].close();
+                } catch (IOException closeE) {
+                    Log.e(TAG, "exportFromBuffer: error closing writer after exception", closeE);
+                }
+            }
+            // Delete partial file
+            if (exportFile.exists() && !exportFile.delete()) {
+                Log.w(TAG, "exportFromBuffer: Could not delete partial export file: " + exportFile.getAbsolutePath());
+            }
+            throw e; // Re-throw to caller
+        } finally {
+            if (writerRef[0] != null) {
+                try {
+                    writerRef[0].close();
+                    Log.d(TAG, "exportFromBuffer: writer closed");
+                } catch (IOException e) {
+                    Log.e(TAG, "exportFromBuffer: error closing writer", e);
+                }
+            }
+        }
+
+        if (bytesWritten.get() == 0) {
+            Log.w(TAG, "exportFromBuffer: No bytes written, deleting empty file");
+            if (exportFile.exists() && !exportFile.delete()) {
+                Log.w(TAG, "exportFromBuffer: Could not delete empty export file: " + exportFile.getAbsolutePath());
+            }
+            return null;
+        }
+
+        Log.i(TAG, "exportFromBuffer: SUCCESS - exported " + bytesWritten.get() + " bytes to " + exportFile.getAbsolutePath());
         return exportFile;
     }
 
