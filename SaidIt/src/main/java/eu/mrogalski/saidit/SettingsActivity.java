@@ -14,6 +14,7 @@ import static eu.mrogalski.saidit.SaidIt.SAVE_TREE_URI_KEY;
 import static eu.mrogalski.saidit.SaidIt.AUDIO_MEMORY_PRESETS;
 import static eu.mrogalski.saidit.SaidIt.AUTO_SAVE_MAX_FILES_DEFAULT;
 import static eu.mrogalski.saidit.SaidIt.AUTO_SAVE_MAX_FILES_KEY;
+import static eu.mrogalski.saidit.SaidIt.DEBUG_LOGGING_ENABLED_KEY;
 
 import android.content.SharedPreferences;
 import android.content.UriPermission;
@@ -21,6 +22,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.DocumentsContract;
+import android.widget.Toast;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -29,6 +31,9 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+
+import java.io.File;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButtonToggleGroup;
@@ -72,6 +77,7 @@ public class SettingsActivity extends AppCompatActivity {
     private TextView summarySize;
     private TextView summaryAutosave;
     private TextView summaryStability;
+    private SwitchMaterial debugLoggingSwitch;
 
     private SharedPreferences sharedPreferences;
 
@@ -188,9 +194,11 @@ public class SettingsActivity extends AppCompatActivity {
         summarySize = findViewById(R.id.summary_size);
         summaryAutosave = findViewById(R.id.summary_autosave);
         summaryStability = findViewById(R.id.summary_stability);
+        debugLoggingSwitch = findViewById(R.id.debug_logging_switch);
 
         Button howToButton = findViewById(R.id.how_to_button);
         Button showTourButton = findViewById(R.id.show_tour_button);
+        Button shareDebugLogsButton = findViewById(R.id.share_debug_logs_button);
 
         sharedPreferences = getSharedPreferences(PACKAGE_NAME, MODE_PRIVATE);
 
@@ -204,6 +212,9 @@ public class SettingsActivity extends AppCompatActivity {
             sharedPreferences.edit().putBoolean("show_tour_on_next_launch", true).apply();
             finish();
         });
+        shareDebugLogsButton.setOnClickListener(v -> shareDebugLogs());
+        debugLoggingSwitch.setOnCheckedChangeListener((buttonView, isChecked) ->
+                sharedPreferences.edit().putBoolean(DEBUG_LOGGING_ENABLED_KEY, isChecked).apply());
 
         // Setup Listeners
         memoryToggleGroup.addOnButtonCheckedListener(memoryToggleListener);
@@ -362,6 +373,8 @@ public class SettingsActivity extends AppCompatActivity {
             qualityToggleGroup.check(R.id.quality_8kHz);
         }
 
+        debugLoggingSwitch.setChecked(sharedPreferences.getBoolean(DEBUG_LOGGING_ENABLED_KEY, false));
+
         // Load and apply auto-save settings
         boolean autoSaveEnabled = sharedPreferences.getBoolean("auto_save_enabled", false);
         autoSaveSwitch.setChecked(autoSaveEnabled);
@@ -475,6 +488,28 @@ public class SettingsActivity extends AppCompatActivity {
         } catch (Exception e) {
             return getString(R.string.save_location_unknown_folder);
         }
+    }
+
+
+    private void shareDebugLogs() {
+        Uri logUri = DebugLogStore.getShareableLogUri(this);
+        if (logUri == null) {
+            File fallbackLog = DebugLogStore.getFallbackLogFile(this);
+            if (fallbackLog != null && fallbackLog.exists() && fallbackLog.length() > 0L) {
+                logUri = FileProvider.getUriForFile(this, getPackageName() + ".provider", fallbackLog);
+            }
+        }
+        if (logUri == null) {
+            Toast.makeText(this, R.string.debug_logs_not_available, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_STREAM, logUri);
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.debug_logs_share_title));
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivity(Intent.createChooser(shareIntent, getString(R.string.share)));
     }
 
     private void updateHistoryLimit() {

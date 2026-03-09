@@ -232,6 +232,11 @@
     <string name="summary_stability_high">High</string>
     <string name="summary_stability_medium">Medium</string>
     <string name="summary_stability_low">Low</string>
+    <string name="debug_mode_title">Debug mode</string>
+    <string name="debug_mode_description">When enabled, Echo writes detailed event and error logs into a logs folder inside your selected save location.</string>
+    <string name="share_debug_logs">Share debug logs</string>
+    <string name="debug_logs_not_available">No debug logs available yet.</string>
+    <string name="debug_logs_share_title">Echo debug logs</string>
     <string name="storage_and_export_title">Storage &amp; Export</string>
     <string name="memory_preset_32">32 MB</string>
     <string name="memory_preset_64">64 MB</string>
