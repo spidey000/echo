@@ -127,6 +127,7 @@ public class SaidItFragment extends Fragment implements SaveClipBottomSheet.Save
 
     @Override
     public void onSaveClip(String fileName, float durationInSeconds, String format, int bitrate, int bitDepth) {
+        DebugLogStore.log(requireContext(), "SaidItFragment", "manual_export_requested fileName=" + fileName + " duration=" + durationInSeconds + " format=" + format + " bitrate=" + bitrate + " bitDepth=" + bitDepth);
         Intent intent = new Intent(getActivity(), SaidItService.class);
         intent.setAction(SaidItService.ACTION_EXPORT_RECORDING);
         intent.putExtra(SaidItService.EXTRA_MEMORY_SECONDS, durationInSeconds);

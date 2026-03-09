@@ -14,6 +14,7 @@ public class SaidIt {
     static final String SAVE_PATH_MODE_KEY = "save_path_mode";
     static final String SAVE_TREE_URI_KEY = "save_tree_uri";
     static final String SAVE_RELATIVE_PATH_KEY = "save_relative_path";
+    static final String DEBUG_LOGGING_ENABLED_KEY = "debug_logging_enabled";
     static final String SAVE_PATH_MODE_DEFAULT = "default_music";
     static final String SAVE_PATH_MODE_CUSTOM = "custom_tree";
     static final String DEFAULT_SAVE_RELATIVE_PATH = "Music/Audio Memory";

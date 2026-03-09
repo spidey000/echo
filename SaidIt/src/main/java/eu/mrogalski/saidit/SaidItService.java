@@ -260,17 +260,23 @@ public class SaidItService extends Service {
         if (intent != null) {
             String action = intent.getAction();
             if (action != null) {
+                DebugLogStore.log(this, TAG, "service_action=" + action);
                 switch (action) {
                     case ACTION_START_LISTENING:
+                        DebugLogStore.log(this, TAG, "action_start_listening");
                         enableListening();
                         break;
                     case ACTION_STOP_LISTENING:
+                        DebugLogStore.log(this, TAG, "action_stop_listening");
                         disableListening();
                         break;
                     case ACTION_START_RECORDING:
-                        startRecording(intent.getFloatExtra(EXTRA_PREPENDED_MEMORY_SECONDS, 0));
+                        float prepended = intent.getFloatExtra(EXTRA_PREPENDED_MEMORY_SECONDS, 0);
+                        DebugLogStore.log(this, TAG, "action_start_recording prepended=" + prepended);
+                        startRecording(prepended);
                         break;
                     case ACTION_STOP_RECORDING:
+                        DebugLogStore.log(this, TAG, "action_stop_recording");
                         stopRecording(null);
                         break;
                     case ACTION_EXPORT_RECORDING:
@@ -284,7 +290,21 @@ public class SaidItService extends Service {
                                 intent.getStringExtra(EXTRA_FORMAT),
                                 bitrate,
                                 bitDepth,
-                                new SaidItFragment.NotifyFileReceiver(this),
+                                new WavFileReceiver() {
+                                    private final SaidItFragment.NotifyFileReceiver delegate = new SaidItFragment.NotifyFileReceiver(SaidItService.this);
+
+                                    @Override
+                                    public void onSuccess(Uri fileUri) {
+                                        DebugLogStore.log(SaidItService.this, TAG, "manual_export_success uri=" + fileUri);
+                                        delegate.onSuccess(fileUri);
+                                    }
+
+                                    @Override
+                                    public void onFailure(Exception e) {
+                                        DebugLogStore.logError(SaidItService.this, TAG, "manual_export_failed", e);
+                                        showToast(getString(R.string.error_saving_failed));
+                                    }
+                                },
                                 intent.getStringExtra(EXTRA_NEW_FILE_NAME));
                         break;
                     case ACTION_GET_STATE:
@@ -476,7 +496,9 @@ public class SaidItService extends Service {
 
         Handler handler = analysisHandler;
         if (handler == null || isShuttingDown) {
-            notifyExportFailure(wavFileReceiver, new IOException("Export unavailable: service not ready."));
+            IOException error = new IOException("Export unavailable: service not ready.");
+            DebugLogStore.logError(this, TAG, "export_unavailable_service_not_ready", error);
+            notifyExportFailure(wavFileReceiver, error);
             return;
         }
 
@@ -488,11 +510,15 @@ public class SaidItService extends Service {
 
         if (store == null) {
             Log.w(TAG, "export_aborted_recording_store_unavailable");
-            notifyExportFailure(wavFileReceiver, new IOException("Export unavailable: recording store not initialized."));
+            DebugLogStore.log(this, TAG, "export_aborted_recording_store_unavailable");
+            IOException error = new IOException("Export unavailable: recording store not initialized.");
+            DebugLogStore.logError(this, TAG, "export_unavailable_recording_store_not_initialized", error);
+            notifyExportFailure(wavFileReceiver, error);
             return;
         }
 
         final RecordingStoreManager finalStore = store;
+        DebugLogStore.log(this, TAG, "export_dispatch memorySeconds=" + memorySeconds + " format=" + format + " fileName=" + newFileName);
         handler.post(() -> recordingExporter.export(
                 finalStore,
                 memorySeconds,

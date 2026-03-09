@@ -60,6 +60,7 @@ public class RecordingExporter {
         if (recordingStoreManager == null) {
             IOException error = new IOException("Recording store unavailable.");
             Log.e(TAG, "Export aborted: recording store unavailable");
+            DebugLogStore.logError(mContext, TAG, "export_aborted_recording_store_unavailable", error);
             showToast(mContext.getString(R.string.error_saving_recording));
             if (wavFileReceiver != null) {
                 wavFileReceiver.onFailure(error);
@@ -76,6 +77,7 @@ public class RecordingExporter {
             int bitDepth = bitDepthOverride != null ? bitDepthOverride : mPreferences.getInt("export_bit_depth", 16);
 
             String fileName = newFileName != null ? newFileName.replaceAll("[^a-zA-Z0-9.-]", "_") : "SaidIt_export";
+            DebugLogStore.log(mContext, TAG, "export_start memorySeconds=" + memorySeconds + " format=" + selectedFormat + " fileName=" + fileName);
             exportFile = recordingStoreManager.export(memorySeconds, fileName);
 
             if (exportFile == null) {
@@ -100,12 +102,14 @@ public class RecordingExporter {
             }
         } catch (UnsatisfiedLinkError e) {
             Log.e(TAG, "Missing native dependency for export", e);
+            DebugLogStore.logError(mContext, TAG, "export_native_dependency_missing", e);
             showToast(mContext.getString(R.string.error_mp3_encoder_unavailable));
             if (wavFileReceiver != null) {
                 wavFileReceiver.onFailure(new IOException("MP3 encoder library is unavailable.", e));
             }
         } catch (IOException e) {
             Log.e(TAG, "ERROR exporting file", e);
+            DebugLogStore.logError(mContext, TAG, "export_failed", e);
             showToast(mContext.getString(R.string.error_saving_recording));
             if (wavFileReceiver != null) {
                 wavFileReceiver.onFailure(e);
@@ -201,9 +205,11 @@ public class RecordingExporter {
             String mode = mPreferences.getString(SAVE_PATH_MODE_KEY, SAVE_PATH_MODE_DEFAULT);
             if (SAVE_PATH_MODE_CUSTOM.equals(mode)) {
                 customAttempted = true;
+                DebugLogStore.log(mContext, TAG, "save_custom_tree_attempt displayName=" + displayName + " mimeType=" + mimeType);
                 savedUri = saveToCustomTree(sourceFile, displayName, mimeType);
                 if (savedUri == null) {
                     Log.w(TAG, "custom_tree write failed: falling back to MediaStore default");
+                    DebugLogStore.log(mContext, TAG, "save_custom_tree_failed_fallback_default");
                 }
             }
 
@@ -211,6 +217,7 @@ public class RecordingExporter {
                 if (customAttempted) {
                     usedDefaultFallback = true;
                 }
+                DebugLogStore.log(mContext, TAG, "save_default_mediastore_attempt displayName=" + displayName + " mimeType=" + mimeType);
                 savedUri = saveToMediaStoreDefault(sourceFile, displayName, mimeType);
             }
 
@@ -220,6 +227,7 @@ public class RecordingExporter {
                 new Handler(Looper.getMainLooper()).post(() -> {
                     if (receiver != null) {
                         receiver.onSuccess(finalUri);
+                        DebugLogStore.log(mContext, TAG, "save_success uri=" + finalUri);
                     }
                     if (finalUsedDefaultFallback) {
                         showToast(mContext.getString(R.string.save_location_fallback_used));
@@ -230,6 +238,7 @@ public class RecordingExporter {
             }
         } catch (IOException e) {
             Log.e(TAG, "Error saving recording", e);
+            DebugLogStore.logError(mContext, TAG, "save_failed", e);
             if (receiver != null) {
                 new Handler(Looper.getMainLooper()).post(() -> receiver.onFailure(e));
             }
@@ -244,6 +253,7 @@ public class RecordingExporter {
         String treeUriString = mPreferences.getString(SAVE_TREE_URI_KEY, null);
         if (treeUriString == null || treeUriString.isEmpty()) {
             Log.w(TAG, "custom_tree invalid_uri: missing URI");
+            DebugLogStore.log(mContext, TAG, "custom_tree_invalid_uri_missing");
             return null;
         }
 
@@ -252,11 +262,13 @@ public class RecordingExporter {
             treeUri = Uri.parse(treeUriString);
         } catch (Exception e) {
             Log.w(TAG, "custom_tree invalid_uri: " + treeUriString, e);
+            DebugLogStore.logError(mContext, TAG, "custom_tree_invalid_uri", e);
             return null;
         }
 
         if (!hasPersistedWritePermission(treeUri)) {
             Log.w(TAG, "custom_tree permission_revoked: " + treeUri);
+            DebugLogStore.log(mContext, TAG, "custom_tree_permission_revoked uri=" + treeUri);
             return null;
         }
 
@@ -265,16 +277,20 @@ public class RecordingExporter {
             Uri destinationUri = DocumentsContract.createDocument(mContext.getContentResolver(), treeDocumentUri, mimeType, displayName);
             if (destinationUri == null) {
                 Log.w(TAG, "custom_tree write_failed: could not create document");
+                DebugLogStore.log(mContext, TAG, "custom_tree_write_failed_create_document");
                 return null;
             }
             copyFileToUri(sourceFile, destinationUri);
             return destinationUri;
         } catch (SecurityException e) {
             Log.w(TAG, "custom_tree permission_revoked while writing", e);
+            DebugLogStore.logError(mContext, TAG, "custom_tree_permission_revoked_while_writing", e);
         } catch (IllegalArgumentException e) {
             Log.w(TAG, "custom_tree invalid_document_uri", e);
+            DebugLogStore.logError(mContext, TAG, "custom_tree_invalid_document_uri", e);
         } catch (IOException e) {
             Log.w(TAG, "custom_tree write_failed", e);
+            DebugLogStore.logError(mContext, TAG, "custom_tree_write_failed", e);
         }
         return null;
     }
