@@ -37,25 +37,67 @@ public class AacExporter {
             ByteBuffer[] outputBuffers = encoder.getOutputBuffers();
 
             boolean inputDone = false;
-            long presentationTimeUs = 0;
+            long totalBytesQueued = 0;
+            ByteBuffer pendingData = null; // holds leftover bytes from previous read
+            int pendingDataLen = 0;
 
             try (FileInputStream fis = new FileInputStream(pcmFile)) {
-                byte[] buffer = new byte[8192];
-                int bytesRead;
+                byte[] readBuffer = new byte[8192];
 
                 while (!inputDone) {
                     int inputBufferIndex = encoder.dequeueInputBuffer(10000);
                     if (inputBufferIndex >= 0) {
                         ByteBuffer inputBuffer = inputBuffers[inputBufferIndex];
                         inputBuffer.clear();
-                        bytesRead = fis.read(buffer);
-                        if (bytesRead == -1) {
-                            encoder.queueInputBuffer(inputBufferIndex, 0, 0, 0, MediaCodec.BUFFER_FLAG_END_OF_STREAM);
-                            inputDone = true;
-                        } else {
-                            inputBuffer.put(buffer, 0, bytesRead);
-                            presentationTimeUs = 1000000L * (pcmFile.length() - fis.available()) / (sampleRate * 2);
-                            encoder.queueInputBuffer(inputBufferIndex, 0, bytesRead, presentationTimeUs, 0);
+                        int spaceAvailable = inputBuffer.remaining();
+                        if (spaceAvailable == 0) {
+                            continue;
+                        }
+
+                        int bytesAdded = 0;
+
+                        // First, add any pending data from previous iteration
+                        if (pendingData != null && pendingDataLen > 0) {
+                            int toCopy = Math.min(pendingDataLen, spaceAvailable);
+                            ByteBuffer src = pendingData.duplicate();
+                            src.limit(toCopy);
+                            inputBuffer.put(src);
+                            pendingDataLen -= toCopy;
+                            if (pendingDataLen == 0) {
+                                pendingData = null;
+                            } else {
+                                // Still have leftover, adjust position for next use
+                                pendingData.position(toCopy);
+                            }
+                            bytesAdded += toCopy;
+                            spaceAvailable -= toCopy;
+                        }
+
+                        // Then, read more data from file if we still have space and not done
+                        if (spaceAvailable > 0 && !inputDone) {
+                            int bytesRead = fis.read(readBuffer);
+                            if (bytesRead == -1) {
+                                inputDone = true;
+                            } else {
+                                int toCopy = Math.min(bytesRead, spaceAvailable);
+                                inputBuffer.put(readBuffer, 0, toCopy);
+                                totalBytesQueued += toCopy;
+
+                                // If we read more than we could fit, store remaining
+                                if (toCopy < bytesRead) {
+                                    pendingData = ByteBuffer.allocate(bytesRead - toCopy);
+                                    pendingData.put(readBuffer, toCopy, bytesRead - toCopy);
+                                    pendingData.flip();
+                                    pendingDataLen = bytesRead - toCopy;
+                                }
+                            }
+                        }
+
+                        // If we added any data, queue the buffer
+                        if (bytesAdded > 0 || (spaceAvailable > 0 && inputDone)) {
+                            long presentationTimeUs = (totalBytesQueued * 1000000L) / (sampleRate * channels * 2);
+                            int flags = inputDone ? MediaCodec.BUFFER_FLAG_END_OF_STREAM : 0;
+                            encoder.queueInputBuffer(inputBufferIndex, 0, bytesAdded, presentationTimeUs, flags);
                         }
                     }
 

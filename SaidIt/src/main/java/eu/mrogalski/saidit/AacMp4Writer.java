@@ -30,6 +30,10 @@ public class AacMp4Writer implements AutoCloseable {
     private long presentationTimeUs = 0;
     private int sampleRate;
 
+    // Pending data that couldn't fit in previous input buffer
+    private ByteBuffer pendingData = null;
+    private int pendingDataLen = 0;
+
     public AacMp4Writer(int sampleRate, int channelCount, int bitRate, File outputFile) throws IOException {
         this.outputFile = outputFile;
         this.sampleRate = sampleRate;
@@ -53,15 +57,52 @@ public class AacMp4Writer implements AutoCloseable {
             if (length == 0) {
                 return;
             }
+
+            // Combine any pending data with new data
+            int totalDataLen = pendingDataLen + length;
+            if (totalDataLen == 0) {
+                return;
+            }
+
+            // Allocate a contiguous buffer with both pending and new data
+            byte[] combinedBuffer = new byte[totalDataLen];
+            int pos = 0;
+            if (pendingData != null && pendingDataLen > 0) {
+                pendingData.rewind();
+                pendingData.get(combinedBuffer, 0, pendingDataLen);
+                pos = pendingDataLen;
+                pendingData = null;
+                pendingDataLen = 0;
+            }
+            System.arraycopy(data, offset, combinedBuffer, pos, length);
+
             drainEncoder();
-            int inputBufferIndex = mediaCodec.dequeueInputBuffer(-1);
-            if (inputBufferIndex >= 0) {
-                ByteBuffer inputBuffer = mediaCodec.getInputBuffer(inputBufferIndex);
-                inputBuffer.clear();
-                inputBuffer.put(data, offset, length);
-                presentationTimeUs += (long) (1000000L * (length / 2) / sampleRate);
-                mediaCodec.queueInputBuffer(inputBufferIndex, 0, length, presentationTimeUs, 0);
-                totalBytesWritten += length;
+
+            int remaining = totalDataLen;
+            int srcOffset = 0;
+
+            while (remaining > 0) {
+                int inputBufferIndex = mediaCodec.dequeueInputBuffer(-1);
+                if (inputBufferIndex >= 0) {
+                    ByteBuffer inputBuffer = mediaCodec.getInputBuffer(inputBufferIndex);
+                    if (inputBuffer == null) {
+                        throw new IOException("Could not get input buffer");
+                    }
+                    inputBuffer.clear();
+                    int spaceAvailable = inputBuffer.remaining();
+                    if (spaceAvailable == 0) {
+                        continue;
+                    }
+                    int toWrite = Math.min(remaining, spaceAvailable);
+                    inputBuffer.put(combinedBuffer, srcOffset, toWrite);
+                    srcOffset += toWrite;
+                    remaining -= toWrite;
+
+                    int samplesWritten = toWrite / 2;
+                    presentationTimeUs += (long) (1000000L * samplesWritten / sampleRate);
+                    mediaCodec.queueInputBuffer(inputBufferIndex, 0, toWrite, presentationTimeUs, 0);
+                    totalBytesWritten += toWrite;
+                }
             }
         }
     }
