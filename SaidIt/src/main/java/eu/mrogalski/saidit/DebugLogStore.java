@@ -28,6 +28,7 @@ import androidx.documentfile.provider.DocumentFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -186,13 +187,26 @@ public final class DebugLogStore {
     }
 
     private static boolean appendToUri(ContentResolver resolver, Uri uri, byte[] data) {
-        try (OutputStream out = resolver.openOutputStream(uri, "wa")) {
-            if (out == null) {
-                return false;
+        try {
+            byte[] existingData = new byte[0];
+            try (InputStream in = resolver.openInputStream(uri)) {
+                if (in != null) {
+                    existingData = in.readAllBytes();
+                }
             }
-            out.write(data);
-            out.flush();
-            return true;
+            
+            byte[] combined = new byte[existingData.length + data.length];
+            System.arraycopy(existingData, 0, combined, 0, existingData.length);
+            System.arraycopy(data, 0, combined, existingData.length, data.length);
+            
+            try (OutputStream out = resolver.openOutputStream(uri, "wt")) {
+                if (out == null) {
+                    return false;
+                }
+                out.write(combined);
+                out.flush();
+                return true;
+            }
         } catch (IOException e) {
             Log.w(TAG, "Failed to append to URI: " + uri, e);
             return false;
