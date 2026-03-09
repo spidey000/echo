@@ -24,8 +24,8 @@ android {
         applicationId = "com.spidey000.echofork"
         minSdk = 30
         targetSdk = 34
-        versionCode = 20
-        versionName = "2.0.4-debug.1"
+        versionCode = 21
+        versionName = "2.0.4-debug.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
