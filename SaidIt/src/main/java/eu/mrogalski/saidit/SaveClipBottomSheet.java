@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -104,6 +103,8 @@ public class SaveClipBottomSheet extends BottomSheetDialogFragment {
         bitrateSlider.setValue(defaultBitrate);
         bitrateValue.setText((defaultBitrate / 1000) + " kbps");
 
+        fileNameInput.setText("saidit-recording-" + System.currentTimeMillis());
+
         if (defaultBitDepth == 24) {
             bitDepthToggleGroup.check(R.id.depth_24);
         } else if (defaultBitDepth == 32) {
@@ -160,8 +161,7 @@ public class SaveClipBottomSheet extends BottomSheetDialogFragment {
         saveButton.setOnClickListener(v -> {
             String fileName = fileNameInput.getText() != null ? fileNameInput.getText().toString().trim() : "";
             if (fileName.isEmpty()) {
-                Toast.makeText(getContext(), R.string.please_enter_file_name, Toast.LENGTH_SHORT).show();
-                return;
+                fileName = "saidit-recording-" + System.currentTimeMillis();
             }
 
             int checkedChipId = durationChipGroup.getCheckedChipId();

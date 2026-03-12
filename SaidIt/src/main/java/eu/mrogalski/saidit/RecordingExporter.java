@@ -19,6 +19,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.media.MediaScannerConnection;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -28,7 +29,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.file.Files;
 
 import eu.mrogalski.saidit.export.AudioExporter;
 import eu.mrogalski.saidit.export.Lame;
@@ -79,17 +79,20 @@ public class RecordingExporter {
             int bitRate = bitrateOverride != null ? bitrateOverride : mPreferences.getInt("export_bitrate", 32000);
             int bitDepth = bitDepthOverride != null ? bitDepthOverride : mPreferences.getInt("export_bit_depth", 16);
 
-            String fileName = newFileName != null ? newFileName.replaceAll("[^a-zA-Z0-9.-]", "_") : "SaidIt_export";
-            DebugLogStore.log(mContext, TAG, "export_start memorySeconds=" + memorySeconds + " format=" + selectedFormat + " fileName=" + fileName);
+            String timestamp = String.valueOf(System.currentTimeMillis());
+            String requestedName = newFileName != null ? newFileName.trim() : "";
+            String baseNameWithoutTimestamp = requestedName.isEmpty() ? "saidit-recording" : requestedName;
+            String fileBaseName = (baseNameWithoutTimestamp + "-" + timestamp).replaceAll("[^a-zA-Z0-9.-]", "_");
+            DebugLogStore.log(mContext, TAG, "export_start memorySeconds=" + memorySeconds + " format=" + selectedFormat + " fileName=" + fileBaseName);
             Log.i(TAG, "export: audioMemory=" + (audioMemory != null ? "present" : "null") + " recordingStoreManager=" + (recordingStoreManager != null ? "present" : "null"));
 
-            exportFile = recordingStoreManager.export(memorySeconds, fileName);
+            exportFile = recordingStoreManager.export(memorySeconds, fileBaseName);
             Log.d(TAG, "export: segment export result=" + (exportFile != null ? exportFile.getAbsolutePath() : "null"));
 
             if (exportFile == null && audioMemory != null) {
                 DebugLogStore.log(mContext, TAG, "export_fallback_to_memory memorySeconds=" + memorySeconds);
                 Log.i(TAG, "export: falling back to audioMemory");
-                exportFile = recordingStoreManager.exportFromBuffer(audioMemory, memorySeconds, fileName);
+                exportFile = recordingStoreManager.exportFromBuffer(audioMemory, memorySeconds, fileBaseName);
                 Log.d(TAG, "export: memory export result=" + (exportFile != null ? exportFile.getAbsolutePath() : "null"));
             } else if (exportFile == null && audioMemory == null) {
                 Log.w(TAG, "export: audioMemory is null, cannot fallback");
@@ -100,14 +103,14 @@ public class RecordingExporter {
             }
 
             Log.i(TAG, "export: exportFile ready, starting conversion");
-            String displayNameBase = newFileName != null ? newFileName : "SaidIt Recording";
+            String displayNameBase = fileBaseName;
             if ("wav".equals(selectedFormat) && bitDepth == 16) {
                 Log.i(TAG, "export: saving as WAV directly");
                 saveFileToMediaStore(exportFile, displayNameBase + ".wav", "audio/wav", wavFileReceiver);
             } else {
                 Log.i(TAG, "export: extracting PCM and encoding to " + selectedFormat);
-                pcmFile = extractPcmFromWav(exportFile, fileName + "_pcm");
-                encodedFile = buildEncodedFile(fileName, selectedFormat);
+                pcmFile = extractPcmFromWav(exportFile, fileBaseName + "_pcm");
+                encodedFile = buildEncodedFile(fileBaseName, selectedFormat);
                 AudioExporter exporter = null;
                 try {
                     exporter = createExporter(selectedFormat);
@@ -250,7 +253,11 @@ public class RecordingExporter {
                     usedDefaultFallback = true;
                 }
                 DebugLogStore.log(mContext, TAG, "save_default_mediastore_attempt displayName=" + displayName + " mimeType=" + mimeType);
-                savedUri = saveToMediaStoreDefault(sourceFile, displayName, mimeType);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    savedUri = saveToMediaStoreDefault(sourceFile, displayName, mimeType);
+                } else {
+                    savedUri = saveToLegacyPublicDirectory(sourceFile, displayName, mimeType);
+                }
             }
 
             if (savedUri != null) {
@@ -355,8 +362,63 @@ public class RecordingExporter {
         }
     }
 
+    private Uri saveToLegacyPublicDirectory(File sourceFile, String displayName, String mimeType) throws IOException {
+        File rootMusic = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC);
+        File targetDirectory = resolveLegacyTargetDirectory(rootMusic);
+        if (!targetDirectory.exists() && !targetDirectory.mkdirs()) {
+            throw new IOException("Failed to create directory: " + targetDirectory.getAbsolutePath());
+        }
+
+        File destination = makeUniqueFile(targetDirectory, displayName);
+        try (InputStream in = new FileInputStream(sourceFile);
+             OutputStream out = new FileOutputStream(destination)) {
+            byte[] buffer = new byte[4096];
+            int len;
+            while ((len = in.read(buffer)) > 0) {
+                out.write(buffer, 0, len);
+            }
+        }
+
+        MediaScannerConnection.scanFile(
+                mContext,
+                new String[]{destination.getAbsolutePath()},
+                new String[]{mimeType},
+                null
+        );
+
+        return Uri.fromFile(destination);
+    }
+
+    private File resolveLegacyTargetDirectory(File rootMusicDir) {
+        String relativePath = getRelativeSavePath().replace('\\', '/');
+        String normalized = relativePath.startsWith("Music/") ? relativePath.substring("Music/".length()) : relativePath;
+        if (normalized.isEmpty()) {
+            return rootMusicDir;
+        }
+        return new File(rootMusicDir, normalized);
+    }
+
+    private File makeUniqueFile(File directory, String displayName) {
+        File candidate = new File(directory, displayName);
+        if (!candidate.exists()) {
+            return candidate;
+        }
+
+        int dot = displayName.lastIndexOf('.');
+        String baseName = dot > 0 ? displayName.substring(0, dot) : displayName;
+        String extension = dot > 0 ? displayName.substring(dot) : "";
+        int index = 1;
+        while (true) {
+            File next = new File(directory, baseName + " (" + index + ")" + extension);
+            if (!next.exists()) {
+                return next;
+            }
+            index++;
+        }
+    }
+
     private void copyFileToUri(File sourceFile, Uri destinationUri) throws IOException {
-        try (InputStream in = Files.newInputStream(sourceFile.toPath());
+        try (InputStream in = new FileInputStream(sourceFile);
              OutputStream out = mContext.getContentResolver().openOutputStream(destinationUri)) {
             if (out == null) {
                 throw new IOException("Failed to open output stream for " + destinationUri);
